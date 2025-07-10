@@ -1,0 +1,1 @@
+Shared styles used in my projects.
