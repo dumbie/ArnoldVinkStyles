@@ -1,5 +1,4 @@
-﻿using ArnoldVinkCode;
-using System;
+﻿using System;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -93,7 +92,7 @@ namespace ArnoldVinkStyles
         {
             if (SkipChangedEvent) { return; }
             LastValueChange = DateTime.Now;
-            AVFunctions.TimerRenew(ref DispatcherTimerDelay);
+            AVTimer.TimerRenew(ref DispatcherTimerDelay);
             DispatcherTimerDelay.Interval = TimeSpan.FromMilliseconds(DelayTime);
             DispatcherTimerDelay.Tick += delegate
             {

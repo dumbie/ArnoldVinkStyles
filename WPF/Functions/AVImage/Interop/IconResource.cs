@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace ArnoldVinkCode
+namespace ArnoldVinkStyles
 {
     public partial class AVImage
     {

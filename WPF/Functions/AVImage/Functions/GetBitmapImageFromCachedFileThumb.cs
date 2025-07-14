@@ -6,7 +6,7 @@ using System.Windows.Media.Imaging;
 using static ArnoldVinkCode.AVInteropDll;
 using static ArnoldVinkCode.AVShell;
 
-namespace ArnoldVinkCode
+namespace ArnoldVinkStyles
 {
     public partial class AVImage
     {

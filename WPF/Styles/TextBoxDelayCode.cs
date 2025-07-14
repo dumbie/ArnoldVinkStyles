@@ -1,5 +1,4 @@
-﻿using ArnoldVinkCode;
-using System;
+﻿using System;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -25,7 +24,7 @@ namespace ArnoldVinkStyles
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             if (SkipChangedEvent) { return; }
-            AVFunctions.TimerRenew(ref DispatcherTimerDelay);
+            AVTimer.TimerRenew(ref DispatcherTimerDelay);
             DispatcherTimerDelay.Interval = TimeSpan.FromMilliseconds(1000);
             DispatcherTimerDelay.Tick += delegate
             {

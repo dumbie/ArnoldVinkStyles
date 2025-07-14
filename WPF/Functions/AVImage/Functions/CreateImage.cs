@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace ArnoldVinkCode
+namespace ArnoldVinkStyles
 {
     public partial class AVImage
     {

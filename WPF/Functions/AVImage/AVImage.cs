@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Media.Imaging;
 using static ArnoldVinkCode.AVSearch;
 
-namespace ArnoldVinkCode
+namespace ArnoldVinkStyles
 {
     public partial class AVImage
     {

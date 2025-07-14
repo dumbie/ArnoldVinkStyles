@@ -1,4 +1,4 @@
-﻿namespace ArnoldVinkCode
+﻿namespace ArnoldVinkStyles
 {
     public partial class AVImage
     {
