@@ -11,9 +11,10 @@ namespace ArnoldVinkStyles
     public partial class AVWindowWinUI
     {
         //Variables
-        private IntPtr _hWnd_MainWindow = IntPtr.Zero;
-        private IntPtr _hWnd_XamlWindow = IntPtr.Zero;
+        private AVWindowDetails _windowDetails = null;
         private DesktopWindowXamlSource _desktopWindowXamlSource = null;
+        private IntPtr _WindowHandleMain = IntPtr.Zero;
+        private IntPtr _WindowHandleXaml = IntPtr.Zero;
 
         //Initialize
         public AVWindowWinUI(AVWindowDetails windowDetails)
@@ -57,6 +58,9 @@ namespace ArnoldVinkStyles
             try
             {
                 Debug.WriteLine("Creating application window: " + windowDetails.Title);
+
+                //Set window details variable
+                _windowDetails = windowDetails;
 
                 //Initialize XAML manager for current thread
                 WindowsXamlManager.InitializeForCurrentThread();
@@ -112,8 +116,8 @@ namespace ArnoldVinkStyles
                 }
 
                 //Create main window
-                _hWnd_MainWindow = CreateWindowEx(windowStyleEx, szWindowClass, szWindowTitle, windowStyle, CW_USEDEFAULT, CW_USEDEFAULT, windowDetails.Width, windowDetails.Height, IntPtr.Zero, IntPtr.Zero, processHandle, IntPtr.Zero);
-                if (_hWnd_MainWindow == IntPtr.Zero)
+                _WindowHandleMain = CreateWindowEx(windowStyleEx, szWindowClass, szWindowTitle, windowStyle, CW_USEDEFAULT, CW_USEDEFAULT, windowDetails.Width, windowDetails.Height, IntPtr.Zero, IntPtr.Zero, processHandle, IntPtr.Zero);
+                if (_WindowHandleMain == IntPtr.Zero)
                 {
                     Debug.WriteLine("CreateWindowEx failed.");
                     return false;
@@ -126,7 +130,7 @@ namespace ArnoldVinkStyles
                 IDesktopWindowXamlSourceNative2 desktopWindowXamlSourceNative = _desktopWindowXamlSource.As<IDesktopWindowXamlSourceNative2>();
 
                 //Attach DesktopWindowXamlSource to main window
-                int attachResult = desktopWindowXamlSourceNative.AttachToWindow(_hWnd_MainWindow);
+                int attachResult = desktopWindowXamlSourceNative.AttachToWindow(_WindowHandleMain);
                 if (attachResult < 0)
                 {
                     Debug.WriteLine("AttachToWindow failed: " + attachResult);
@@ -134,16 +138,16 @@ namespace ArnoldVinkStyles
                 }
 
                 //Get DesktopWindowXamlSource window handle
-                _hWnd_XamlWindow = desktopWindowXamlSourceNative.GetWindowHandle();
-                if (_hWnd_XamlWindow == IntPtr.Zero)
+                _WindowHandleXaml = desktopWindowXamlSourceNative.GetWindowHandle();
+                if (_WindowHandleXaml == IntPtr.Zero)
                 {
                     Debug.WriteLine("GetWindowHandle failed.");
                     return false;
                 }
 
                 //Update DesktopWindowXamlSource window size
-                GetClientRect(_hWnd_MainWindow, out RECT rectClient);
-                SetWindowPos(_hWnd_XamlWindow, IntPtr.Zero, 0, 0, rectClient.Right, rectClient.Bottom, SetWindowPositions.SWP_SHOWWINDOW);
+                GetClientRect(_WindowHandleMain, out RECT rectClient);
+                SetWindowPos(_WindowHandleXaml, IntPtr.Zero, 0, 0, rectClient.Right, rectClient.Bottom, SetWindowPositions.SWP_SHOWWINDOW);
 
                 //Set DesktopWindowXamlSource content
                 _desktopWindowXamlSource.Content = frameworkElement;
@@ -157,8 +161,8 @@ namespace ArnoldVinkStyles
                 }
 
                 //Destroy window
-                DestroyWindow(_hWnd_MainWindow);
-                DestroyWindow(_hWnd_XamlWindow);
+                DestroyWindow(_WindowHandleMain);
+                DestroyWindow(_WindowHandleXaml);
 
                 //Return result
                 Debug.WriteLine("Closed application window: " + windowDetails.Title);

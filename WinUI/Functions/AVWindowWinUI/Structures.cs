@@ -37,6 +37,16 @@ namespace ArnoldVinkStyles
             public int pt_y;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MINMAXINFO
+        {
+            public POINT ptReserved;
+            public POINT ptMaxSize;
+            public POINT ptMaxPosition;
+            public POINT ptMinTrackSize;
+            public POINT ptMaxTrackSize;
+        }
+
         public struct RECT
         {
             public int Left;
