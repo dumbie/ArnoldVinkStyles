@@ -76,10 +76,7 @@ namespace ArnoldVinkStyles
                 string szWindowClass = "AVWindow" + Environment.TickCount64.ToString();
 
                 //Load window icon
-                //Assembly thisAssembly = Assembly.GetExecutingAssembly();
-                //string appName = thisAssembly.GetName().Name;
-                //Stream iconStream = thisAssembly.GetManifestResourceStream(appName + ".Resources.AppIcon.ico");
-                //Icon iconSource = new Icon(iconStream);
+                IntPtr windowIcon = LoadIcon(windowDetails.IconPath);
 
                 //Prepare window class
                 WindowClassEx windowClassEx = new WindowClassEx();
@@ -87,7 +84,7 @@ namespace ArnoldVinkStyles
                 windowClassEx.style = ClassStyles.CS_HREDRAW | ClassStyles.CS_VREDRAW;
                 windowClassEx.lpfnWndProc = WindowProc;
                 windowClassEx.hInstance = processHandle;
-                //windowClass.hIcon = iconSource.Handle;
+                windowClassEx.hIcon = windowIcon;
                 windowClassEx.lpszClassName = szWindowClass;
                 if (windowDetails.NoCloseButton)
                 {

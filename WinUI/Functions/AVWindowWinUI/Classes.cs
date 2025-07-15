@@ -12,6 +12,7 @@ namespace ArnoldVinkStyles
             /// </summary>
             public Type Type { get; set; }
             public string Title { get; set; } = "Unknown";
+            public string IconPath { get; set; } = string.Empty;
             public int Width { get; set; } = 600;
             public int MinWidth { get; set; } = 275;
             public int MaxWidth { get; set; } = 0;
@@ -39,7 +40,7 @@ namespace ArnoldVinkStyles
             /// </summary>
             public bool TopMost { get; set; } = false;
 
-            //Fix Style / State / AllowsTransparency / ResizeMode / ShowInTaskbar / Icon / StartLocation
+            //Fix Style / State / AllowsTransparency / ResizeMode / StartLocation
         }
     }
 }
