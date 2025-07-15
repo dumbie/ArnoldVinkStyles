@@ -99,9 +99,19 @@ namespace ArnoldVinkStyles
                     return false;
                 }
 
-                //Create main window
-                WindowStyles windowStyle = WindowStyles.WS_VISIBLE | WindowStyles.WS_OVERLAPPEDWINDOW;
+                //Prepare window creation
+                WindowStyles windowStyle = WindowStyles.WS_VISIBLE;
                 WindowStylesEx windowStyleEx = WindowStylesEx.WS_EX_NOREDIRECTIONBITMAP;
+                if (windowDetails.NoBorder)
+                {
+                    windowStyle |= WindowStyles.WS_POPUPWINDOW;
+                }
+                else
+                {
+                    windowStyle |= WindowStyles.WS_OVERLAPPEDWINDOW;
+                }
+
+                //Create main window
                 _hWnd_MainWindow = CreateWindowEx(windowStyleEx, szWindowClass, szWindowTitle, windowStyle, CW_USEDEFAULT, CW_USEDEFAULT, windowDetails.Width, windowDetails.Height, IntPtr.Zero, IntPtr.Zero, processHandle, IntPtr.Zero);
                 if (_hWnd_MainWindow == IntPtr.Zero)
                 {

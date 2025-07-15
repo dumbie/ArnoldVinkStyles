@@ -12,6 +12,7 @@ namespace ArnoldVinkStyles
             public int Width { get; set; } = 600;
             public int Height { get; set; } = 600;
             public bool DisableCloseButton { get; set; } = false;
+            public bool NoBorder { get; set; } = false;
 
             //Fix MinWidth / MaxWidth / TopMost / Style / State / AllowsTransparency / ResizeMode / ShowInTaskbar / Icon / StartLocation / 
         }
