@@ -89,7 +89,7 @@ namespace ArnoldVinkStyles
                 windowClassEx.hInstance = processHandle;
                 //windowClass.hIcon = iconSource.Handle;
                 windowClassEx.lpszClassName = szWindowClass;
-                if (windowDetails.DisableCloseButton)
+                if (windowDetails.NoCloseButton)
                 {
                     //Fix does not block tray close button
                     windowClassEx.style |= ClassStyles.CS_NOCLOSE;
@@ -113,6 +113,18 @@ namespace ArnoldVinkStyles
                 else
                 {
                     windowStyle |= WindowStyles.WS_OVERLAPPEDWINDOW;
+                }
+                if (windowDetails.NoActivation)
+                {
+                    windowStyleEx |= WindowStylesEx.WS_EX_NOACTIVATE;
+                }
+                if (windowDetails.NoSwitch)
+                {
+                    windowStyleEx |= WindowStylesEx.WS_EX_TOOLWINDOW;
+                }
+                if (windowDetails.TopMost)
+                {
+                    windowStyleEx |= WindowStylesEx.WS_EX_TOPMOST;
                 }
 
                 //Create main window

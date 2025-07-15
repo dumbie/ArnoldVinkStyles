@@ -7,6 +7,9 @@ namespace ArnoldVinkStyles
         //Classes
         public class AVWindowDetails()
         {
+            /// <summary>
+            /// FrameworkElement type that gets set as content
+            /// </summary>
             public Type Type { get; set; }
             public string Title { get; set; } = "Unknown";
             public int Width { get; set; } = 600;
@@ -15,10 +18,28 @@ namespace ArnoldVinkStyles
             public int Height { get; set; } = 600;
             public int MinHeight { get; set; } = 250;
             public int MaxHeight { get; set; } = 0;
-            public bool DisableCloseButton { get; set; } = false;
+            /// <summary>
+            /// Disable window close button
+            /// </summary>
+            public bool NoCloseButton { get; set; } = false;
+            /// <summary>
+            /// Show window without any border only the content
+            /// </summary>
             public bool NoBorder { get; set; } = false;
+            /// <summary>
+            /// Prevent window from focus and activation
+            /// </summary>
+            public bool NoActivation { get; set; } = false;
+            /// <summary>
+            /// Prevent window from showing up on Alt+Tab and taskbar
+            /// </summary>
+            public bool NoSwitch { get; set; } = false;
+            /// <summary>
+            /// Show window above all other non topmost windows
+            /// </summary>
+            public bool TopMost { get; set; } = false;
 
-            //Fix MinWidth / MaxWidth / TopMost / Style / State / AllowsTransparency / ResizeMode / ShowInTaskbar / Icon / StartLocation / 
+            //Fix Style / State / AllowsTransparency / ResizeMode / ShowInTaskbar / Icon / StartLocation
         }
     }
 }
