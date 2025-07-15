@@ -1,0 +1,19 @@
+﻿using System;
+
+namespace ArnoldVinkStyles
+{
+    public partial class AVWindowWinUI
+    {
+        //Classes
+        public class AVWindowDetails()
+        {
+            public Type Type { get; set; }
+            public string Title { get; set; } = "Unknown";
+            public int Width { get; set; } = 600;
+            public int Height { get; set; } = 600;
+            public bool DisableCloseButton { get; set; } = false;
+
+            //Fix MinWidth / MaxWidth / TopMost / Style / State / AllowsTransparency / ResizeMode / ShowInTaskbar / Icon / StartLocation / 
+        }
+    }
+}
