@@ -34,6 +34,11 @@ namespace ArnoldVinkStyles
             }
         }
 
+        public IntPtr GetHandle()
+        {
+            return _WindowHandleMain;
+        }
+
         public void SetContent(FrameworkElement content)
         {
             try
