@@ -161,6 +161,13 @@ namespace ArnoldVinkStyles
                 //Set DesktopWindowXamlSource content
                 _desktopWindowXamlSource.Content = frameworkElement;
 
+                //Allow background transparency
+                if (windowDetails.BackgroundTransparency)
+                {
+                    IXamlSourceTransparency windowTransparency = Window.Current.As<IXamlSourceTransparency>();
+                    windowTransparency.IsBackgroundTransparent(true);
+                }
+
                 //Window message loop
                 MSG lpMsg = new MSG();
                 while (GetMessageW(out lpMsg, IntPtr.Zero, 0, 0))

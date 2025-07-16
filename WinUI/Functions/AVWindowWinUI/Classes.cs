@@ -11,13 +11,37 @@ namespace ArnoldVinkStyles
             /// FrameworkElement type that gets set as content
             /// </summary>
             public Type Type { get; set; }
+            /// <summary>
+            /// Set window title
+            /// </summary>
             public string Title { get; set; } = "Unknown";
+            /// <summary>
+            /// Path to window icon file or assembly resource
+            /// </summary>
             public string IconPath { get; set; } = string.Empty;
+            /// <summary>
+            /// Set window width
+            /// </summary>
             public int Width { get; set; } = 600;
+            /// <summary>
+            /// Set window minimum width
+            /// </summary>
             public int MinWidth { get; set; } = 275;
+            /// <summary>
+            /// Set window maximum width
+            /// </summary>
             public int MaxWidth { get; set; } = 0;
+            /// <summary>
+            /// Set window height
+            /// </summary>
             public int Height { get; set; } = 600;
+            /// <summary>
+            /// Set window minimum height
+            /// </summary>
             public int MinHeight { get; set; } = 250;
+            /// <summary>
+            /// Set window maximum height
+            /// </summary>
             public int MaxHeight { get; set; } = 0;
             /// <summary>
             /// Disable window close button
@@ -39,8 +63,12 @@ namespace ArnoldVinkStyles
             /// Show window above all other non topmost windows
             /// </summary>
             public bool TopMost { get; set; } = false;
+            /// <summary>
+            /// Allows window background to be transparent
+            /// </summary>
+            public bool BackgroundTransparency { get; set; } = false;
 
-            //Fix Style / State / AllowsTransparency / ResizeMode / StartLocation
+            //Fix NoResize / StartLocation
         }
     }
 }
