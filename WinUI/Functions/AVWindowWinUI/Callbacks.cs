@@ -12,10 +12,14 @@ namespace ArnoldVinkStyles
             {
                 switch (messageCode)
                 {
+                    case (int)WindowMessages.WM_CLOSE:
+                        DestroyWindow(hWnd);
+                        break;
                     case (int)WindowMessages.WM_DESTROY:
                         PostQuitMessage(0);
                         break;
                     case (int)WindowMessages.WM_SIZE:
+                    case (int)WindowMessages.WM_DPICHANGED:
                         GetClientRect(hWnd, out RECT rectClient);
                         MoveWindow(_WindowHandleXaml, 0, 0, rectClient.Right, rectClient.Bottom, true);
                         break;

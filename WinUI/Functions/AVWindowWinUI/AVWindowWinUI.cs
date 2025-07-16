@@ -176,10 +176,6 @@ namespace ArnoldVinkStyles
                     DispatchMessageW(ref lpMsg);
                 }
 
-                //Destroy window
-                DestroyWindow(_WindowHandleMain);
-                DestroyWindow(_WindowHandleXaml);
-
                 //Return result
                 Debug.WriteLine("Closed application window: " + windowDetails.Title);
                 return true;
