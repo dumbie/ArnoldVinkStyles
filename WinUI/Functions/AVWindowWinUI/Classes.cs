@@ -60,6 +60,10 @@ namespace ArnoldVinkStyles
             /// </summary>
             public bool NoBorder { get; set; } = false;
             /// <summary>
+            /// Prevent window from getting resized
+            /// </summary>
+            public bool NoResize { get; set; } = false;
+            /// <summary>
             /// Prevent window from focus and activation
             /// </summary>
             public bool NoActivation { get; set; } = false;
@@ -76,7 +80,7 @@ namespace ArnoldVinkStyles
             /// </summary>
             public bool BackgroundTransparency { get; set; } = false;
 
-            //Fix NoResize / StartLocation
+            //Fix StartLocation
         }
     }
 }

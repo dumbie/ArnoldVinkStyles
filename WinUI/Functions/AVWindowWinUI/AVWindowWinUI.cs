@@ -89,7 +89,7 @@ namespace ArnoldVinkStyles
                 windowClassEx.lpszClassName = szWindowClass;
                 if (_windowDetails.NoCloseButton)
                 {
-                    //Fix does not block tray close button
+                    //Fix does not disable tray close button
                     windowClassEx.style |= ClassStyles.CS_NOCLOSE;
                 }
 
@@ -119,6 +119,10 @@ namespace ArnoldVinkStyles
                 if (_windowDetails.NoMinimizeButton)
                 {
                     windowStyle &= ~WindowStyles.WS_MINIMIZEBOX;
+                }
+                if (_windowDetails.NoResize)
+                {
+                    windowStyle &= ~WindowStyles.WS_THICKFRAME;
                 }
                 if (_windowDetails.NoActivation)
                 {
