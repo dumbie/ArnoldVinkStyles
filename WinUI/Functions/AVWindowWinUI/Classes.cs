@@ -20,6 +20,10 @@ namespace ArnoldVinkStyles
             /// </summary>
             public string IconPath { get; set; } = string.Empty;
             /// <summary>
+            /// Window start state
+            /// </summary>
+            public AVWindowState State { get; set; } = AVWindowState.Normal;
+            /// <summary>
             /// Window start location
             /// </summary>
             public AVWindowLocation Location { get; set; } = AVWindowLocation.MiddleCenter;

@@ -3,6 +3,13 @@
     public partial class AVWindowWinUI
     {
         //Enumerators
+        public enum AVWindowState : int
+        {
+            Normal,
+            Minimized,
+            Maximized
+        }
+
         public enum AVWindowLocation : int
         {
             TopLeft,

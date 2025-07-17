@@ -185,7 +185,18 @@ namespace ArnoldVinkStyles
                 //Show window and update size and location
                 MoveWindow(_WindowHandleMain, windowLocation.X, windowLocation.Y, _windowDetails.Width, _windowDetails.Height, true);
                 ShowWindow(_WindowHandleXaml, ShowWindowCommands.SW_SHOWNORMAL);
-                ShowWindow(_WindowHandleMain, ShowWindowCommands.SW_SHOWNORMAL);
+                if (_windowDetails.State == AVWindowState.Normal)
+                {
+                    ShowWindow(_WindowHandleMain, ShowWindowCommands.SW_SHOWNORMAL);
+                }
+                else if (_windowDetails.State == AVWindowState.Minimized)
+                {
+                    ShowWindow(_WindowHandleMain, ShowWindowCommands.SW_SHOWMINIMIZED);
+                }
+                else if (_windowDetails.State == AVWindowState.Maximized)
+                {
+                    ShowWindow(_WindowHandleMain, ShowWindowCommands.SW_SHOWMAXIMIZED);
+                }
 
                 //Convert type to framework element
                 FrameworkElement frameworkElement = (FrameworkElement)Activator.CreateInstance(_windowDetails.Type);
