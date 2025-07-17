@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Hosting;
 using WinRT;
@@ -21,16 +22,19 @@ namespace ArnoldVinkStyles
         {
             try
             {
+                //Set window details variable
+                _windowDetails = windowDetails;
+
+                //Create window in new thread
                 Thread windowThread = new Thread(delegate ()
                 {
-                    CreateWindow(windowDetails);
+                    CreateWindow();
                 });
-                windowThread.SetApartmentState(ApartmentState.STA);
                 windowThread.Start();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Initialize failed: " + ex.Message);
+                Debug.WriteLine("AVWindowWinUI failed: " + ex.Message);
             }
         }
 
@@ -58,30 +62,21 @@ namespace ArnoldVinkStyles
             }
         }
 
-        public bool CreateWindow(AVWindowDetails windowDetails)
+        private bool CreateWindow()
         {
             try
             {
-                Debug.WriteLine("Creating application window: " + windowDetails.Title);
-
-                //Set window details variable
-                _windowDetails = windowDetails;
-
-                //Initialize XAML manager for current thread
-                WindowsXamlManager.InitializeForCurrentThread();
-
-                //Convert type to framework element
-                FrameworkElement frameworkElement = (FrameworkElement)Activator.CreateInstance(windowDetails.Type);
+                Debug.WriteLine("Creating application window: " + _windowDetails.Title);
 
                 //Get current process handle
                 IntPtr processHandle = Process.GetCurrentProcess().Handle;
 
                 //Set window strings
-                string szWindowTitle = windowDetails.Title;
+                string szWindowTitle = _windowDetails.Title;
                 string szWindowClass = "AVWindow" + Environment.TickCount64.ToString();
 
                 //Load window icon
-                IntPtr windowIcon = LoadIcon(windowDetails.IconPath);
+                IntPtr windowIcon = LoadIcon(_windowDetails.IconPath);
 
                 //Prepare window class
                 WindowClassEx windowClassEx = new WindowClassEx();
@@ -91,7 +86,7 @@ namespace ArnoldVinkStyles
                 windowClassEx.hInstance = processHandle;
                 windowClassEx.hIcon = windowIcon;
                 windowClassEx.lpszClassName = szWindowClass;
-                if (windowDetails.NoCloseButton)
+                if (_windowDetails.NoCloseButton)
                 {
                     //Fix does not block tray close button
                     windowClassEx.style |= ClassStyles.CS_NOCLOSE;
@@ -108,7 +103,7 @@ namespace ArnoldVinkStyles
                 //Prepare window creation
                 WindowStyles windowStyle = WindowStyles.WS_VISIBLE;
                 WindowStylesEx windowStyleEx = WindowStylesEx.WS_EX_NOREDIRECTIONBITMAP;
-                if (windowDetails.NoBorder)
+                if (_windowDetails.NoBorder)
                 {
                     windowStyle |= WindowStyles.WS_POPUPWINDOW;
                 }
@@ -116,26 +111,32 @@ namespace ArnoldVinkStyles
                 {
                     windowStyle |= WindowStyles.WS_OVERLAPPEDWINDOW;
                 }
-                if (windowDetails.NoActivation)
+                if (_windowDetails.NoActivation)
                 {
                     windowStyleEx |= WindowStylesEx.WS_EX_NOACTIVATE;
                 }
-                if (windowDetails.NoSwitch)
+                if (_windowDetails.NoSwitch)
                 {
                     windowStyleEx |= WindowStylesEx.WS_EX_TOOLWINDOW;
                 }
-                if (windowDetails.TopMost)
+                if (_windowDetails.TopMost)
                 {
                     windowStyleEx |= WindowStylesEx.WS_EX_TOPMOST;
                 }
 
                 //Create main window
-                _WindowHandleMain = CreateWindowEx(windowStyleEx, szWindowClass, szWindowTitle, windowStyle, CW_USEDEFAULT, CW_USEDEFAULT, windowDetails.Width, windowDetails.Height, IntPtr.Zero, IntPtr.Zero, processHandle, IntPtr.Zero);
+                _WindowHandleMain = CreateWindowEx(windowStyleEx, szWindowClass, szWindowTitle, windowStyle, CW_USEDEFAULT, CW_USEDEFAULT, _windowDetails.Width, _windowDetails.Height, IntPtr.Zero, IntPtr.Zero, processHandle, IntPtr.Zero);
                 if (_WindowHandleMain == IntPtr.Zero)
                 {
                     Debug.WriteLine("CreateWindowEx failed.");
                     return false;
                 }
+
+                //Initialize XAML manager for current thread
+                WindowsXamlManager.InitializeForCurrentThread();
+
+                //Set synchronization context
+                SynchronizationContext.SetSynchronizationContext(new DispatcherQueueSynchronizationContext(DispatcherQueue.GetForCurrentThread()));
 
                 //Create desktop window xaml source
                 _desktopWindowXamlSource = new DesktopWindowXamlSource();
@@ -163,11 +164,14 @@ namespace ArnoldVinkStyles
                 GetClientRect(_WindowHandleMain, out RECT rectClient);
                 SetWindowPos(_WindowHandleXaml, IntPtr.Zero, 0, 0, rectClient.Right, rectClient.Bottom, SetWindowPositions.SWP_SHOWWINDOW);
 
+                //Convert type to framework element
+                FrameworkElement frameworkElement = (FrameworkElement)Activator.CreateInstance(_windowDetails.Type);
+
                 //Set DesktopWindowXamlSource content
                 _desktopWindowXamlSource.Content = frameworkElement;
 
                 //Allow background transparency
-                if (windowDetails.BackgroundTransparency)
+                if (_windowDetails.BackgroundTransparency)
                 {
                     IXamlSourceTransparency windowTransparency = Window.Current.As<IXamlSourceTransparency>();
                     windowTransparency.IsBackgroundTransparent(true);
@@ -182,7 +186,7 @@ namespace ArnoldVinkStyles
                 }
 
                 //Return result
-                Debug.WriteLine("Closed application window: " + windowDetails.Title);
+                Debug.WriteLine("Closed application window: " + _windowDetails.Title);
                 return true;
             }
             catch (Exception ex)
