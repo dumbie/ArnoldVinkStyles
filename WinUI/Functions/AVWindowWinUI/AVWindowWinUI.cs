@@ -30,6 +30,7 @@ namespace ArnoldVinkStyles
                 {
                     CreateWindow();
                 });
+                windowThread.SetApartmentState(ApartmentState.STA);
                 windowThread.Start();
             }
             catch (Exception ex)
@@ -73,7 +74,7 @@ namespace ArnoldVinkStyles
 
                 //Set window strings
                 string szWindowTitle = _windowDetails.Title;
-                string szWindowClass = "AVWindow" + Environment.TickCount64.ToString();
+                string szWindowClass = "AVWindow" + new Random().NextInt64();
 
                 //Load window icon
                 IntPtr windowIcon = LoadIcon(_windowDetails.IconPath);
@@ -110,6 +111,14 @@ namespace ArnoldVinkStyles
                 else
                 {
                     windowStyle |= WindowStyles.WS_OVERLAPPEDWINDOW;
+                }
+                if (_windowDetails.NoMaximizeButton)
+                {
+                    windowStyle &= ~WindowStyles.WS_MAXIMIZEBOX;
+                }
+                if (_windowDetails.NoMinimizeButton)
+                {
+                    windowStyle &= ~WindowStyles.WS_MINIMIZEBOX;
                 }
                 if (_windowDetails.NoActivation)
                 {

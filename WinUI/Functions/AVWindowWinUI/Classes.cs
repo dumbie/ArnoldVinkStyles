@@ -48,6 +48,14 @@ namespace ArnoldVinkStyles
             /// </summary>
             public bool NoCloseButton { get; set; } = false;
             /// <summary>
+            /// Disable window maximize button
+            /// </summary>
+            public bool NoMaximizeButton { get; set; } = false;
+            /// <summary>
+            /// Disable window minimize button
+            /// </summary>
+            public bool NoMinimizeButton { get; set; } = false;
+            /// <summary>
             /// Show window without any border only the content
             /// </summary>
             public bool NoBorder { get; set; } = false;
