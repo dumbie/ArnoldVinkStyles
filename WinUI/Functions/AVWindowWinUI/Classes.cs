@@ -20,6 +20,10 @@ namespace ArnoldVinkStyles
             /// </summary>
             public string IconPath { get; set; } = string.Empty;
             /// <summary>
+            /// Window start location
+            /// </summary>
+            public AVWindowLocation Location { get; set; } = AVWindowLocation.MiddleCenter;
+            /// <summary>
             /// Set window width
             /// </summary>
             public int Width { get; set; } = 600;
@@ -79,8 +83,6 @@ namespace ArnoldVinkStyles
             /// Allows window background to be transparent
             /// </summary>
             public bool BackgroundTransparency { get; set; } = false;
-
-            //Fix StartLocation
         }
     }
 }

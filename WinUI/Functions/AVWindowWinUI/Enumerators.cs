@@ -3,6 +3,35 @@
     public partial class AVWindowWinUI
     {
         //Enumerators
+        public enum AVWindowLocation : int
+        {
+            TopLeft,
+            TopCenter,
+            TopRight,
+            MiddleLeft,
+            MiddleCenter,
+            MiddleRight,
+            BottomLeft,
+            BottomCenter,
+            BottomRight
+        }
+
+        public enum ShowWindowCommands : int
+        {
+            SW_HIDE = 0,
+            SW_SHOWNORMAL = 1,
+            SW_SHOWMINIMIZED = 2,
+            SW_SHOWMAXIMIZED = 3,
+            SW_SHOWNOACTIVATE = 4,
+            SW_SHOW = 5,
+            SW_MINIMIZE = 6,
+            SW_SHOWMINNOACTIVE = 7,
+            SW_SHOWNA = 8,
+            SW_RESTORE = 9,
+            SW_SHOWDEFAULT = 10,
+            SW_FORCEMINIMIZE = 11
+        }
+
         public enum SetWindowPositions : uint
         {
             SWP_NONE = 0x0000,
@@ -90,6 +119,7 @@
             WM_HELP = 0x0053,
             WM_USERCHANGED = 0x0054,
             WM_NOTIFYFORMAT = 0x0055,
+            WM_FINALDESTROY = 0x0070,
             WM_CONTEXTMENU = 0x007B,
             WM_STYLECHANGING = 0x007C,
             WM_STYLECHANGED = 0x007D,
@@ -104,6 +134,14 @@
             WM_NCACTIVATE = 0x0086,
             WM_GETDLGCODE = 0x0087,
             WM_SYNCPAINT = 0x0088,
+            WM_SYNCTASK = 0x89,
+            WM_UAHDESTROYWINDOW = 0x0090,
+            WM_UAHDRAWMENU = 0x0091,
+            WM_UAHDRAWMENUITEM = 0x0092,
+            WM_UAHINITMENU = 0x0093,
+            WM_UAHMEASUREMENUITEM = 0x0094,
+            WM_UAHNCPAINTMENUPOPUP = 0x0095,
+            WM_UAHUPDATE = 0x0096,
             WM_MOUSEQUERY = 0x009B,
             WM_NCMOUSEMOVE = 0x00A0,
             WM_NCLBUTTONDOWN = 0x00A1,
@@ -181,7 +219,7 @@
             WM_MOVING = 0x0216,
             WM_POWERBROADCAST = 0x0218,
             WM_DEVICECHANGE = 0x0219,
-            WM_POINTERDEVICECHANGE = 0X0238,
+            WM_POINTERDEVICECHANGE = 0x0238,
             WM_POINTERDEVICEINRANGE = 0x0239,
             WM_POINTERDEVICEOUTOFRANGE = 0x023A,
             WM_POINTERUPDATE = 0x0245,
@@ -216,11 +254,12 @@
             WM_DROPFILES = 0x0233,
             WM_MDIREFRESHMENU = 0x0234,
             WM_MOUSEHOVER = 0x02A1,
+            WM_NCMOUSEHOVER = 0x02A0,
             WM_NCMOUSELEAVE = 0x02A2,
             WM_MOUSELEAVE = 0x02A3,
-            WM_WTSSESSION_CHANGE = 0x02b1,
-            WM_TABLET_FIRST = 0x02c0,
-            WM_TABLET_LAST = 0x02df,
+            WM_WTSSESSION_CHANGE = 0x02B1,
+            WM_TABLET_FIRST = 0x02C0,
+            WM_TABLET_LAST = 0x02DF,
             WM_DPICHANGED = 0x02E0,
             WM_DPICHANGED_BEFOREPARENT = 0x02E2,
             WM_DPICHANGED_AFTERPARENT = 0x02E3,
@@ -284,6 +323,7 @@
 
         public enum WindowStyles : uint
         {
+            WS_NONE = 0x00000000,
             WS_OVERLAPPED = 0x00000000,
             WS_POPUP = 0x80000000,
             WS_CHILD = 0x40000000,
@@ -315,6 +355,7 @@
 
         public enum WindowStylesEx : uint
         {
+            WS_EX_NONE = 0x00000000,
             WS_EX_DLGMODALFRAME = 0x00000001,
             WS_EX_NOPARENTNOTIFY = 0x00000004,
             WS_EX_TOPMOST = 0x00000008,
@@ -391,7 +432,5 @@
             ULW_OPAQUE = 0x00000004,
             ULW_EX_NORESIZE = 0x00000008
         }
-
-        public const uint CW_USEDEFAULT = 0x80000000;
     }
 }

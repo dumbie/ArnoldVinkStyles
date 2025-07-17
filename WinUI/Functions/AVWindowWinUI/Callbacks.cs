@@ -25,10 +25,10 @@ namespace ArnoldVinkStyles
                         break;
                     case (int)WindowMessages.WM_GETMINMAXINFO:
                         MINMAXINFO minMaxInfo = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
-                        if (_windowDetails.MinWidth > 0) { minMaxInfo.ptMinTrackSize.X = _windowDetails.MinWidth; }
-                        if (_windowDetails.MinHeight > 0) { minMaxInfo.ptMinTrackSize.Y = _windowDetails.MinHeight; }
-                        if (_windowDetails.MaxWidth > 0) { minMaxInfo.ptMaxTrackSize.X = _windowDetails.MaxWidth; }
-                        if (_windowDetails.MaxHeight > 0) { minMaxInfo.ptMaxTrackSize.Y = _windowDetails.MaxHeight; }
+                        if (_windowDetails.MinWidth != 0) { minMaxInfo.ptMinTrackSize.X = _windowDetails.MinWidth; }
+                        if (_windowDetails.MinHeight != 0) { minMaxInfo.ptMinTrackSize.Y = _windowDetails.MinHeight; }
+                        if (_windowDetails.MaxWidth != 0) { minMaxInfo.ptMaxTrackSize.X = _windowDetails.MaxWidth; }
+                        if (_windowDetails.MaxHeight != 0) { minMaxInfo.ptMaxTrackSize.Y = _windowDetails.MaxHeight; }
                         Marshal.StructureToPtr(minMaxInfo, lParam, true);
                         break;
                     default:

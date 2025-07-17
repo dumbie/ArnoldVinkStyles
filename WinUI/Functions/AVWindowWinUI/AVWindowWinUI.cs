@@ -102,7 +102,7 @@ namespace ArnoldVinkStyles
                 }
 
                 //Prepare window creation
-                WindowStyles windowStyle = WindowStyles.WS_VISIBLE;
+                WindowStyles windowStyle = WindowStyles.WS_NONE;
                 WindowStylesEx windowStyleEx = WindowStylesEx.WS_EX_NOREDIRECTIONBITMAP;
                 if (_windowDetails.NoBorder)
                 {
@@ -138,7 +138,7 @@ namespace ArnoldVinkStyles
                 }
 
                 //Create main window
-                _WindowHandleMain = CreateWindowEx(windowStyleEx, szWindowClass, szWindowTitle, windowStyle, CW_USEDEFAULT, CW_USEDEFAULT, _windowDetails.Width, _windowDetails.Height, IntPtr.Zero, IntPtr.Zero, processHandle, IntPtr.Zero);
+                _WindowHandleMain = CreateWindowEx(windowStyleEx, szWindowClass, szWindowTitle, windowStyle, 0, 0, 0, 0, IntPtr.Zero, IntPtr.Zero, processHandle, IntPtr.Zero);
                 if (_WindowHandleMain == IntPtr.Zero)
                 {
                     Debug.WriteLine("CreateWindowEx failed.");
@@ -173,9 +173,19 @@ namespace ArnoldVinkStyles
                     return false;
                 }
 
-                //Update DesktopWindowXamlSource window size
-                GetClientRect(_WindowHandleMain, out RECT rectClient);
-                SetWindowPos(_WindowHandleXaml, IntPtr.Zero, 0, 0, rectClient.Right, rectClient.Bottom, SetWindowPositions.SWP_SHOWWINDOW);
+                //Check minimum and maximum window size
+                if (_windowDetails.MinWidth != 0 && _windowDetails.Width < _windowDetails.MinWidth) { _windowDetails.Width = _windowDetails.MinWidth; }
+                if (_windowDetails.MaxWidth != 0 && _windowDetails.Width > _windowDetails.MaxWidth) { _windowDetails.Width = _windowDetails.MaxWidth; }
+                if (_windowDetails.MinHeight != 0 && _windowDetails.Height < _windowDetails.MinHeight) { _windowDetails.Height = _windowDetails.MinHeight; }
+                if (_windowDetails.MaxHeight != 0 && _windowDetails.Height > _windowDetails.MaxHeight) { _windowDetails.Height = _windowDetails.MaxHeight; }
+
+                //Get window location coordinates
+                POINT windowLocation = GetWindowLocationCoordinates();
+
+                //Show window and update size and location
+                MoveWindow(_WindowHandleMain, windowLocation.X, windowLocation.Y, _windowDetails.Width, _windowDetails.Height, true);
+                ShowWindow(_WindowHandleXaml, ShowWindowCommands.SW_SHOWNORMAL);
+                ShowWindow(_WindowHandleMain, ShowWindowCommands.SW_SHOWNORMAL);
 
                 //Convert type to framework element
                 FrameworkElement frameworkElement = (FrameworkElement)Activator.CreateInstance(_windowDetails.Type);
