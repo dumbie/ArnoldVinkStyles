@@ -9,7 +9,7 @@ using WinRT;
 
 namespace ArnoldVinkStyles
 {
-    public partial class AVWindowWinUI
+    public partial class AVWindow
     {
         //Variables
         private AVWindowDetails _windowDetails = null;
@@ -18,7 +18,7 @@ namespace ArnoldVinkStyles
         private IntPtr _WindowHandleXaml = IntPtr.Zero;
 
         //Initialize
-        public AVWindowWinUI(AVWindowDetails windowDetails)
+        public AVWindow(AVWindowDetails windowDetails)
         {
             try
             {

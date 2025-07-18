@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace ArnoldVinkStyles
 {
-    public partial class AVWindowWinUI
+    public partial class AVWindow
     {
         //Interfaces
         [GeneratedComInterface, Guid("AF86E2E0-B12D-4C6A-9C5A-D7AA65101E90")]

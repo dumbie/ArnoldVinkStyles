@@ -1,6 +1,6 @@
 ﻿namespace ArnoldVinkStyles
 {
-    public partial class AVWindowWinUI
+    public partial class AVWindow
     {
         //Enumerators
         public enum AVWindowState : int

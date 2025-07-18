@@ -7,7 +7,7 @@ using Windows.Graphics.Display;
 
 namespace ArnoldVinkStyles
 {
-    public partial class AVWindowWinUI
+    public partial class AVWindow
     {
         //Functions
         private IntPtr LoadIcon(string iconPath)

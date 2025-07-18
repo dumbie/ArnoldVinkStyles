@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ArnoldVinkStyles
 {
-    public partial class AVWindowWinUI
+    public partial class AVWindow
     {
         //Interop
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]

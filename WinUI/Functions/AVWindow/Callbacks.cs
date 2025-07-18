@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ArnoldVinkStyles
 {
-    public partial class AVWindowWinUI
+    public partial class AVWindow
     {
         //Callbacks
         private IntPtr WindowProc(IntPtr hWnd, IntPtr messageCode, IntPtr wParam, IntPtr lParam)

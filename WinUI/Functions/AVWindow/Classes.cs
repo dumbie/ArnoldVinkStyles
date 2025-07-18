@@ -2,7 +2,7 @@
 
 namespace ArnoldVinkStyles
 {
-    public partial class AVWindowWinUI
+    public partial class AVWindow
     {
         //Classes
         public class AVWindowDetails()
