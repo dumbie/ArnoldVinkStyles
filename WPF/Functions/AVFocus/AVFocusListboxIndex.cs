@@ -1,5 +1,4 @@
-﻿using ArnoldVinkCode;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,24 +17,21 @@ namespace ArnoldVinkStyles
         {
             try
             {
-                await AVActions.DispatcherInvoke(async delegate
+                //Get the currently focused element
+                FrameworkElement frameworkElement = (FrameworkElement)Keyboard.FocusedElement;
+
+                //Check if focused element is disconnected
+                bool disconnectedSource = frameworkElement == null || frameworkElement.DataContext == BindingOperations.DisconnectedSource;
+
+                //Focus on the listbox or select index
+                if (disconnectedSource || frameworkElement == focusListBox)
                 {
-                    //Get the currently focused element
-                    FrameworkElement frameworkElement = (FrameworkElement)Keyboard.FocusedElement;
-
-                    //Check if focused element is disconnected
-                    bool disconnectedSource = frameworkElement == null || frameworkElement.DataContext == BindingOperations.DisconnectedSource;
-
-                    //Focus on the listbox or select index
-                    if (disconnectedSource || frameworkElement == focusListBox)
-                    {
-                        await ListBoxFocusIndex(focusListBox, lastIndex, indexNumber, windowHandle);
-                    }
-                    else
-                    {
-                        ListBoxSelectIndex(focusListBox, lastIndex, indexNumber);
-                    }
-                });
+                    await ListBoxFocusIndex(focusListBox, lastIndex, indexNumber, windowHandle);
+                }
+                else
+                {
+                    ListBoxSelectIndex(focusListBox, lastIndex, indexNumber);
+                }
             }
             catch { }
         }
@@ -45,67 +41,64 @@ namespace ArnoldVinkStyles
         {
             try
             {
-                await AVActions.DispatcherInvoke(async delegate
+                //Check if listbox is null
+                if (focusListBox == null)
                 {
-                    //Check if listbox is null
-                    if (focusListBox == null)
-                    {
-                        Debug.WriteLine("Listbox cannot be focused on, pressing tab key.");
-                        KeySendSingle(KeysVirtual.Tab, windowHandle);
-                        return;
-                    }
+                    Debug.WriteLine("Listbox cannot be focused on, pressing tab key.");
+                    KeySendSingle(KeysVirtual.Tab, windowHandle);
+                    return;
+                }
 
-                    //Check if listbox is disabled
-                    if (!focusListBox.IsEnabled)
-                    {
-                        Debug.WriteLine("Listbox is disabled, pressing tab key.");
-                        KeySendSingle(KeysVirtual.Tab, windowHandle);
-                        return;
-                    }
+                //Check if listbox is disabled
+                if (!focusListBox.IsEnabled)
+                {
+                    Debug.WriteLine("Listbox is disabled, pressing tab key.");
+                    KeySendSingle(KeysVirtual.Tab, windowHandle);
+                    return;
+                }
 
-                    //Check if listbox is focusable
-                    if (!focusListBox.Focusable)
-                    {
-                        Debug.WriteLine("Listbox cannot be focused on, pressing tab key.");
-                        KeySendSingle(KeysVirtual.Tab, windowHandle);
-                        return;
-                    }
+                //Check if listbox is focusable
+                if (!focusListBox.Focusable)
+                {
+                    Debug.WriteLine("Listbox cannot be focused on, pressing tab key.");
+                    KeySendSingle(KeysVirtual.Tab, windowHandle);
+                    return;
+                }
 
-                    //Check if listbox is visible
-                    if (focusListBox.Visibility != Visibility.Visible)
-                    {
-                        Debug.WriteLine("Listbox is not visible, pressing tab key.");
-                        KeySendSingle(KeysVirtual.Tab, windowHandle);
-                        return;
-                    }
+                //Check if listbox is visible
+                if (focusListBox.Visibility != Visibility.Visible)
+                {
+                    Debug.WriteLine("Listbox is not visible, pressing tab key.");
+                    KeySendSingle(KeysVirtual.Tab, windowHandle);
+                    return;
+                }
 
-                    //Check if listbox has items
-                    if (focusListBox.Items.Count == 0)
-                    {
-                        Debug.WriteLine("Listbox has no items, pressing tab key.");
-                        KeySendSingle(KeysVirtual.Tab, windowHandle);
-                        return;
-                    }
+                //Check if listbox has items
+                if (focusListBox.Items.Count == 0)
+                {
+                    Debug.WriteLine("Listbox has no items, pressing tab key.");
+                    KeySendSingle(KeysVirtual.Tab, windowHandle);
+                    return;
+                }
 
-                    //Update the listbox layout
-                    focusListBox.UpdateLayout();
+                //Update the listbox layout
+                focusListBox.UpdateLayout();
 
-                    //Select a listbox index
-                    ListBoxSelectIndex(focusListBox, lastIndex, indexNumber);
+                //Select a listbox index
+                ListBoxSelectIndex(focusListBox, lastIndex, indexNumber);
 
-                    //Focus on the listbox and item
-                    int selectedIndex = focusListBox.SelectedIndex;
+                //Focus on the listbox and item
+                int selectedIndex = focusListBox.SelectedIndex;
 
-                    //Scroll to the listbox item
-                    object scrollListBoxItem = focusListBox.Items[selectedIndex];
-                    focusListBox.ScrollIntoView(scrollListBoxItem);
+                //Scroll to the listbox item
+                object scrollListBoxItem = focusListBox.Items[selectedIndex];
+                focusListBox.ScrollIntoView(scrollListBoxItem);
 
-                    //Force focus on element
-                    ListBoxItem focusListBoxItem = (ListBoxItem)focusListBox.ItemContainerGenerator.ContainerFromInd‌​ex(selectedIndex);
-                    await FocusElement(focusListBoxItem, windowHandle);
+                //Force focus on element
+                ListBoxItem focusListBoxItem = (ListBoxItem)focusListBox.ItemContainerGenerator.ContainerFromInd‌​ex(selectedIndex);
+                await FocusElement(focusListBoxItem, windowHandle);
 
-                    Debug.WriteLine("Focusing on listbox index: " + selectedIndex);
-                });
+                Debug.WriteLine("Focusing on listbox index: " + selectedIndex);
             }
             catch (Exception ex)
             {
@@ -119,41 +112,38 @@ namespace ArnoldVinkStyles
         {
             try
             {
-                AVActions.DispatcherInvoke(delegate
+                //Update the listbox layout
+                focusListBox.UpdateLayout();
+
+                //Get listbox item count
+                int itemsCount = focusListBox.Items.Count;
+
+                //Select the listbox index
+                if (lastIndex)
                 {
-                    //Update the listbox layout
-                    focusListBox.UpdateLayout();
-
-                    //Get listbox item count
-                    int itemsCount = focusListBox.Items.Count;
-
-                    //Select the listbox index
-                    if (lastIndex)
+                    focusListBox.SelectedIndex = itemsCount - 1;
+                    Debug.WriteLine("Selecting last listbox index.");
+                }
+                else if (indexNumber > -1)
+                {
+                    if (indexNumber >= itemsCount)
                     {
                         focusListBox.SelectedIndex = itemsCount - 1;
                         Debug.WriteLine("Selecting last listbox index.");
                     }
-                    else if (indexNumber > -1)
+                    else
                     {
-                        if (indexNumber >= itemsCount)
-                        {
-                            focusListBox.SelectedIndex = itemsCount - 1;
-                            Debug.WriteLine("Selecting last listbox index.");
-                        }
-                        else
-                        {
-                            focusListBox.SelectedIndex = indexNumber;
-                            Debug.WriteLine("Selecting listbox index: " + indexNumber);
-                        }
+                        focusListBox.SelectedIndex = indexNumber;
+                        Debug.WriteLine("Selecting listbox index: " + indexNumber);
                     }
+                }
 
-                    //Check the selected index
-                    if (focusListBox.SelectedIndex <= -1)
-                    {
-                        focusListBox.SelectedIndex = 0;
-                        Debug.WriteLine("No selection, selecting first listbox index.");
-                    }
-                });
+                //Check the selected index
+                if (focusListBox.SelectedIndex <= -1)
+                {
+                    focusListBox.SelectedIndex = 0;
+                    Debug.WriteLine("No selection, selecting first listbox index.");
+                }
             }
             catch (Exception ex)
             {

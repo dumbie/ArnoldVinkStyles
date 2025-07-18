@@ -1,6 +1,5 @@
-﻿using System;
+﻿using ArnoldVinkCode;
 using System.Windows.Controls;
-using System.Windows.Threading;
 
 namespace ArnoldVinkStyles
 {
@@ -12,7 +11,7 @@ namespace ArnoldVinkStyles
     public class TextBoxDelay : TextBox
     {
         private bool SkipChangedEvent = false;
-        private DispatcherTimer DispatcherTimerDelay = new DispatcherTimer();
+        private AVTimer DispatcherTimerDelay = new AVTimer();
 
         public void TextSkipEvent(dynamic newText)
         {
@@ -24,14 +23,14 @@ namespace ArnoldVinkStyles
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             if (SkipChangedEvent) { return; }
-            AVTimer.TimerRenew(ref DispatcherTimerDelay);
-            DispatcherTimerDelay.Interval = TimeSpan.FromMilliseconds(1000);
-            DispatcherTimerDelay.Tick += delegate
+            DispatcherTimerDelay.Renew();
+            DispatcherTimerDelay.Interval(1000);
+            DispatcherTimerDelay.Action(delegate
             {
                 //Debug.WriteLine("Textbox text change delayed.");
                 DispatcherTimerDelay.Stop();
                 base.OnTextChanged(e);
-            };
+            });
             DispatcherTimerDelay.Start();
         }
     }

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ArnoldVinkCode;
+using System;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace ArnoldVinkStyles
 {
@@ -13,12 +13,12 @@ namespace ArnoldVinkStyles
 
     public class SliderDelay : Slider
     {
-        public double DelayTime { get; set; } = 500;
+        public int DelayTime { get; set; } = 500;
         public bool DelayIgnoreDrag { get; set; } = false;
         public bool SliderThumbDragging { get; protected set; } = false;
         public bool MouseWheelScrollEnabled { get; set; } = true;
         public DateTime LastValueChange { get; protected set; } = DateTime.Now;
-        private DispatcherTimer DispatcherTimerDelay = new DispatcherTimer();
+        private AVTimer DispatcherTimerDelay = new AVTimer();
         private bool SkipChangedEvent = false;
         public bool RecentValueChange()
         {
@@ -92,9 +92,9 @@ namespace ArnoldVinkStyles
         {
             if (SkipChangedEvent) { return; }
             LastValueChange = DateTime.Now;
-            AVTimer.TimerRenew(ref DispatcherTimerDelay);
-            DispatcherTimerDelay.Interval = TimeSpan.FromMilliseconds(DelayTime);
-            DispatcherTimerDelay.Tick += delegate
+            DispatcherTimerDelay.Renew();
+            DispatcherTimerDelay.Interval(DelayTime);
+            DispatcherTimerDelay.Action(delegate
             {
                 if (DelayIgnoreDrag || !SliderThumbDragging)
                 {
@@ -102,7 +102,7 @@ namespace ArnoldVinkStyles
                     DispatcherTimerDelay.Stop();
                     base.OnValueChanged(oldValue, newValue);
                 }
-            };
+            });
             DispatcherTimerDelay.Start();
         }
     }

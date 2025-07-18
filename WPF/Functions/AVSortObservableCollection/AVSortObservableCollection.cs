@@ -1,5 +1,4 @@
-﻿using ArnoldVinkCode;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -44,64 +43,61 @@ namespace ArnoldVinkStyles
         {
             try
             {
-                AVActions.DispatcherInvoke(delegate
+                Debug.WriteLine("Sorting ObservableCollection ListBox");
+
+                //Get current selected item
+                dynamic selectedItem = listBox.SelectedItem;
+
+                //Filter list
+                int skipCount = 0;
+                IEnumerable<T> whereEnumerable = null;
+                if (where != null)
                 {
-                    Debug.WriteLine("Sorting ObservableCollection ListBox");
+                    whereEnumerable = listSort.Where(where);
+                    skipCount = listSort.Count() - whereEnumerable.Count();
+                }
+                else
+                {
+                    whereEnumerable = listSort;
+                }
 
-                    //Get current selected item
-                    dynamic selectedItem = listBox.SelectedItem;
-
-                    //Filter list
-                    int skipCount = 0;
-                    IEnumerable<T> whereEnumerable = null;
-                    if (where != null)
+                //Sort list
+                IOrderedEnumerable<T> sortEnumerable = null;
+                foreach (SortFunction<T> orderFunc in orderBy)
+                {
+                    if (sortEnumerable == null)
                     {
-                        whereEnumerable = listSort.Where(where);
-                        skipCount = listSort.Count() - whereEnumerable.Count();
-                    }
-                    else
-                    {
-                        whereEnumerable = listSort;
-                    }
-
-                    //Sort list
-                    IOrderedEnumerable<T> sortEnumerable = null;
-                    foreach (SortFunction<T> orderFunc in orderBy)
-                    {
-                        if (sortEnumerable == null)
+                        if (orderFunc.Direction == SortDirection.Ascending || orderFunc.Direction == SortDirection.Default)
                         {
-                            if (orderFunc.Direction == SortDirection.Ascending || orderFunc.Direction == SortDirection.Default)
-                            {
-                                sortEnumerable = whereEnumerable.OrderBy(orderFunc.Function);
-                            }
-                            else
-                            {
-                                sortEnumerable = whereEnumerable.OrderByDescending(orderFunc.Function);
-                            }
+                            sortEnumerable = whereEnumerable.OrderBy(orderFunc.Function);
                         }
                         else
                         {
-                            if (orderFunc.Direction == SortDirection.Ascending || orderFunc.Direction == SortDirection.Default)
-                            {
-                                sortEnumerable = sortEnumerable.ThenBy(orderFunc.Function);
-                            }
-                            else
-                            {
-                                sortEnumerable = sortEnumerable.ThenByDescending(orderFunc.Function);
-                            }
+                            sortEnumerable = whereEnumerable.OrderByDescending(orderFunc.Function);
                         }
                     }
-
-                    //Move items
-                    List<T> sortedList = sortEnumerable.ToList();
-                    for (int i = skipCount; i < sortedList.Count(); i++)
+                    else
                     {
-                        listSort.Move(listSort.IndexOf(sortedList[i]), i);
+                        if (orderFunc.Direction == SortDirection.Ascending || orderFunc.Direction == SortDirection.Default)
+                        {
+                            sortEnumerable = sortEnumerable.ThenBy(orderFunc.Function);
+                        }
+                        else
+                        {
+                            sortEnumerable = sortEnumerable.ThenByDescending(orderFunc.Function);
+                        }
                     }
+                }
 
-                    //Select focused item
-                    ListBoxSelectItem(listBox, selectedItem);
-                });
+                //Move items
+                List<T> sortedList = sortEnumerable.ToList();
+                for (int i = skipCount; i < sortedList.Count(); i++)
+                {
+                    listSort.Move(listSort.IndexOf(sortedList[i]), i);
+                }
+
+                //Select focused item
+                ListBoxSelectItem(listBox, selectedItem);
             }
             catch { }
         }
