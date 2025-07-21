@@ -1,8 +1,9 @@
-﻿using ArnoldVinkCode;
-using System;
+﻿using System;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using static ArnoldVinkCode.AVActions;
+using static ArnoldVinkStyles.AVDispatcherInvoke;
 
 namespace ArnoldVinkStyles
 {
@@ -18,7 +19,7 @@ namespace ArnoldVinkStyles
         public bool SliderThumbDragging { get; protected set; } = false;
         public bool MouseWheelScrollEnabled { get; set; } = true;
         public DateTime LastValueChange { get; protected set; } = DateTime.Now;
-        private AVTimer DispatcherTimerDelay = new AVTimer();
+        private AVHighResTimer TimerDelay = new AVHighResTimer();
         private bool SkipChangedEvent = false;
         public bool RecentValueChange()
         {
@@ -92,18 +93,24 @@ namespace ArnoldVinkStyles
         {
             if (SkipChangedEvent) { return; }
             LastValueChange = DateTime.Now;
-            DispatcherTimerDelay.Renew();
-            DispatcherTimerDelay.Interval(DelayTime);
-            DispatcherTimerDelay.Action(delegate
+
+            //Start delay timer
+            TimerDelay.Interval = (uint)DelayTime;
+            TimerDelay.Tick = delegate
             {
                 if (DelayIgnoreDrag || !SliderThumbDragging)
                 {
-                    //Debug.WriteLine("Slider value change delayed.");
-                    DispatcherTimerDelay.Stop();
-                    base.OnValueChanged(oldValue, newValue);
+                    DispatcherInvoke(delegate
+                    {
+                        //Stop delay timer
+                        TimerDelay.Stop();
+
+                        //Debug.WriteLine("Slider value change delayed.");
+                        base.OnValueChanged(oldValue, newValue);
+                    });
                 }
-            });
-            DispatcherTimerDelay.Start();
+            };
+            TimerDelay.Start();
         }
     }
 }
