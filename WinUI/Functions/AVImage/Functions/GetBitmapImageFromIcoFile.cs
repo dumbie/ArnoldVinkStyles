@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
-using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -17,28 +17,30 @@ namespace ArnoldVinkStyles
             List<BitmapFrameOrder> bitmapFrames = new List<BitmapFrameOrder>();
             try
             {
-                StorageFile storageFile = await StorageFile.GetFileFromPathAsync(icoFilePath);
-                using (IRandomAccessStream fileStream = await storageFile.OpenReadAsync())
+                using (FileStream storageFile = File.OpenRead(icoFilePath))
                 {
-                    //Decode ico file stream
-                    BitmapDecoder iconBitmapDecoder = await BitmapDecoder.CreateAsync(fileStream);
-
-                    //Add all bitmap frames to list
-                    for (uint i = 0; i < iconBitmapDecoder.FrameCount; i++)
+                    using (IRandomAccessStream fileStream = storageFile.AsRandomAccessStream())
                     {
-                        BitmapFrame bitmapFrame = await iconBitmapDecoder.GetFrameAsync(i);
-                        BitmapFrameOrder bitmapFrameOrder = new BitmapFrameOrder();
-                        bitmapFrameOrder.PixelWidth = bitmapFrame.PixelWidth;
-                        bitmapFrameOrder.ThumbnailImageStream = await bitmapFrame.GetThumbnailAsync();
-                        bitmapFrameOrder.ThumbnailSize = bitmapFrameOrder.ThumbnailImageStream.Size;
-                        bitmapFrames.Add(bitmapFrameOrder);
+                        //Decode ico file stream
+                        BitmapDecoder iconBitmapDecoder = await BitmapDecoder.CreateAsync(fileStream);
+
+                        //Add all bitmap frames to list
+                        for (uint i = 0; i < iconBitmapDecoder.FrameCount; i++)
+                        {
+                            BitmapFrame bitmapFrame = await iconBitmapDecoder.GetFrameAsync(i);
+                            BitmapFrameOrder bitmapFrameOrder = new BitmapFrameOrder();
+                            bitmapFrameOrder.PixelWidth = bitmapFrame.PixelWidth;
+                            bitmapFrameOrder.ThumbnailImageStream = await bitmapFrame.GetThumbnailAsync();
+                            bitmapFrameOrder.ThumbnailSize = bitmapFrameOrder.ThumbnailImageStream.Size;
+                            bitmapFrames.Add(bitmapFrameOrder);
+                        }
+
+                        //Sort bitmap frames by size
+                        BitmapFrameOrder bitmapFrameLargest = bitmapFrames.OrderBy(x => x.PixelWidth).ThenBy(x => x.ThumbnailSize).LastOrDefault();
+
+                        //Convert image stream to bitmap image
+                        return RandomAccessStreamToBitmapImage(bitmapFrameLargest.ThumbnailImageStream, imageWidth, imageHeight);
                     }
-
-                    //Sort bitmap frames by size
-                    BitmapFrameOrder bitmapFrameLargest = bitmapFrames.OrderBy(x => x.PixelWidth).ThenBy(x => x.ThumbnailSize).LastOrDefault();
-
-                    //Convert image stream to bitmap image
-                    return RandomAccessStreamToBitmapImage(bitmapFrameLargest.ThumbnailImageStream, imageWidth, imageHeight);
                 }
             }
             catch (Exception ex)

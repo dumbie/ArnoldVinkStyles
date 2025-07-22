@@ -1,8 +1,6 @@
-﻿using System;
+﻿using ArnoldVinkCode;
+using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace ArnoldVinkStyles
@@ -10,15 +8,12 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get BitmapImage from Path
-        public static async Task<BitmapImage> GetBitmapImageFromPath(string sourcePath, int imageWidth, int imageHeight)
+        public static BitmapImage GetBitmapImageFromPath(string sourcePath, int imageWidth, int imageHeight)
         {
             try
             {
-                StorageFile fileImage = await StorageFile.GetFileFromPathAsync(sourcePath);
-                using (IRandomAccessStream fileStream = await fileImage.OpenAsync(FileAccessMode.Read))
-                {
-                    return RandomAccessStreamToBitmapImage(fileStream, imageWidth, imageHeight);
-                }
+                byte[] imageBytes = AVFiles.FileToBytes([sourcePath]);
+                return BytesToBitmapImage(imageBytes, imageWidth, imageHeight);
             }
             catch (Exception ex)
             {
