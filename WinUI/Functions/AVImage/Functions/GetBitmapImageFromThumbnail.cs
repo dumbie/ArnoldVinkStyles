@@ -1,48 +1,69 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.Storage.FileProperties;
+using System.Drawing;
 using Windows.UI.Xaml.Media.Imaging;
+using static ArnoldVinkCode.AVInteropDll;
+using static ArnoldVinkCode.AVShell;
 
 namespace ArnoldVinkStyles
 {
     public partial class AVImage
     {
         //Get BitmapImage from thumbnail
-        public async static Task<BitmapImage> GetBitmapImageFromThumbnail(string filePath, int imageWidth, int imageHeight)
+        public static BitmapImage GetBitmapImageFromThumbnail(string filePath, int imageWidth, int imageHeight)
         {
-            StorageItemThumbnail storageItemThumbnail = null;
+            IntPtr bitmapPointer = IntPtr.Zero;
             try
             {
-                //Check if path is file or folder
-                bool pathIsFolder = File.GetAttributes(filePath).HasFlag(System.IO.FileAttributes.Directory);
-                if (pathIsFolder)
+                //Create shellitem instance
+                SHCreateItemFromParsingName(filePath, IntPtr.Zero, typeof(IShellItem2).GUID, out object shellObject);
+                if (shellObject == null)
                 {
-                    StorageFolder storageFolder = await StorageFolder.GetFolderFromPathAsync(filePath);
-                    storageItemThumbnail = await storageFolder.GetThumbnailAsync(ThumbnailMode.SingleItem, (uint)imageWidth, ThumbnailOptions.ResizeThumbnail);
-                }
-                else
-                {
-                    StorageFile storageFile = await StorageFile.GetFileFromPathAsync(filePath);
-                    storageItemThumbnail = await storageFile.GetThumbnailAsync(ThumbnailMode.SingleItem, (uint)imageWidth, ThumbnailOptions.ResizeThumbnail);
+                    Debug.WriteLine("Thumbnail failed to create shellitem instance.");
+                    return null;
                 }
 
-                //Convert image stream to bitmap image
-                return RandomAccessStreamToBitmapImage(storageItemThumbnail, imageWidth, imageHeight);
+                //Cast shellitem instance
+                IShellItem2 shellItem = (IShellItem2)shellObject;
+
+                //Create thumbnail instance
+                IThumbnailCache thumbnailCacheInstance = (IThumbnailCache)Activator.CreateInstance(Type.GetTypeFromCLSID(CLSID_LocalThumbnailCache));
+                if (thumbnailCacheInstance == null)
+                {
+                    Debug.WriteLine("Thumbnail failed to create cache instance.");
+                    return null;
+                }
+
+                //Get bitmap instance
+                thumbnailCacheInstance.GetThumbnail(shellItem, imageWidth, WTS_FLAGS.WTS_EXTRACT, out ISharedBitmap sharedBitmapInstance, out _, out _);
+                if (sharedBitmapInstance == null)
+                {
+                    Debug.WriteLine("Thumbnail failed to create bitmap instance.");
+                    return null;
+                }
+
+                //Get bitmap pointer
+                sharedBitmapInstance.GetSharedBitmap(out bitmapPointer);
+                if (bitmapPointer == IntPtr.Zero)
+                {
+                    Debug.WriteLine("Thumbnail failed bitmap pointer is empty.");
+                    return null;
+                }
+
+                //Convert pointer to bitmap
+                Bitmap sourceBitmap = Bitmap.FromHbitmap(bitmapPointer);
+
+                //Convert to bitmap image
+                return BitmapToBitmapImage(ref sourceBitmap, imageWidth, imageHeight);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Failed to load image from thumbnail: " + ex.Message);
+                Debug.WriteLine("Thumbnail failed to load: " + filePath + " / " + ex.Message);
                 return null;
             }
             finally
             {
-                if (storageItemThumbnail != null)
-                {
-                    storageItemThumbnail.Dispose();
-                }
+                SafeCloseIcon(ref bitmapPointer);
             }
         }
     }
