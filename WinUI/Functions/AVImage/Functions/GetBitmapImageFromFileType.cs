@@ -10,7 +10,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get icon from file type
-        public static BitmapImage GetBitmapImageFromFileType(string fileType, int imageWidth, int imageHeight)
+        private static BitmapImage GetBitmapImageFromFileType(string fileType, int imageWidth, int imageHeight)
         {
             IntPtr iconHandle = IntPtr.Zero;
             try

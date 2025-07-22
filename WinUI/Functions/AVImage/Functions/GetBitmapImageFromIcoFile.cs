@@ -12,7 +12,8 @@ namespace ArnoldVinkStyles
 {
     public partial class AVImage
     {
-        public static async Task<BitmapImage> GetBitmapImageFromIcoFile(string icoFilePath, int imageWidth, int imageHeight)
+        //Get highest quality image from ico file
+        private static async Task<BitmapImage> GetBitmapImageFromIcoFile(string icoFilePath, int imageWidth, int imageHeight)
         {
             List<BitmapFrameOrder> bitmapFrames = new List<BitmapFrameOrder>();
             try

@@ -12,7 +12,8 @@ namespace ArnoldVinkStyles
 {
     public partial class AVImage
     {
-        public static BitmapImage GetBitmapImageFromExecutable(string exeFilePath, int iconIndex, int imageWidth, int imageHeight)
+        //Get icon from executable file
+        private static BitmapImage GetBitmapImageFromExecutable(string exeFilePath, int iconIndex, int imageWidth, int imageHeight)
         {
             IntPtr iconHandle = IntPtr.Zero;
             IntPtr libraryHandle = IntPtr.Zero;

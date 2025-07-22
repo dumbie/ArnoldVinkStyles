@@ -8,7 +8,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get BitmapImage from Path
-        public static BitmapImage GetBitmapImageFromPath(string sourcePath, int imageWidth, int imageHeight)
+        private static BitmapImage GetBitmapImageFromPath(string sourcePath, int imageWidth, int imageHeight)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace ArnoldVinkStyles
         }
 
         //Get BitmapImage from Uri
-        public static BitmapImage GetBitmapImageFromUri(Uri sourceUri, int imageWidth, int imageHeight)
+        private static BitmapImage GetBitmapImageFromUri(Uri sourceUri, int imageWidth, int imageHeight)
         {
             try
             {

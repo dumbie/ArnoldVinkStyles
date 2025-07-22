@@ -9,7 +9,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get window icon from process window
-        public static BitmapImage GetBitmapImageFromWindow(IntPtr windowHandle, int imageWidth, int imageHeight)
+        private static BitmapImage GetBitmapImageFromWindow(IntPtr windowHandle, int imageWidth, int imageHeight)
         {
             IntPtr iconHandle = IntPtr.Zero;
             try
