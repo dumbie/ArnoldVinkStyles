@@ -86,7 +86,7 @@ namespace ArnoldVinkStyles
             /// <summary>
             /// Allows window background to be transparent
             /// </summary>
-            public bool BackgroundTransparency { get; set; } = false;
+            public bool Transparency { get; set; } = false;
         }
     }
 }

@@ -31,8 +31,6 @@ namespace ArnoldVinkStyles
                         if (_windowDetails.MaxHeight != 0) { minMaxInfo.ptMaxTrackSize.Y = _windowDetails.MaxHeight; }
                         Marshal.StructureToPtr(minMaxInfo, lParam, true);
                         break;
-                    default:
-                        break;
                 }
             }
             catch { }

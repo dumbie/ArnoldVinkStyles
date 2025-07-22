@@ -82,7 +82,6 @@ namespace ArnoldVinkStyles
                 //Prepare window class
                 WindowClassEx windowClassEx = new WindowClassEx();
                 windowClassEx.cbSize = (uint)Marshal.SizeOf(typeof(WindowClassEx));
-                windowClassEx.style = ClassStyles.CS_HREDRAW | ClassStyles.CS_VREDRAW;
                 windowClassEx.lpfnWndProc = WindowProc;
                 windowClassEx.hInstance = processHandle;
                 windowClassEx.hIcon = windowIcon;
@@ -182,9 +181,11 @@ namespace ArnoldVinkStyles
                 //Get window location coordinates
                 POINT windowLocation = GetWindowLocationCoordinates();
 
-                //Show window and update size and location
+                //Show xaml window and allow text input
+                SetWindowPos(_WindowHandleXaml, IntPtr.Zero, 0, 0, 0, 0, SetWindowPositions.SWP_SHOWWINDOW);
+
+                //Show main window and update size and location
                 MoveWindow(_WindowHandleMain, windowLocation.X, windowLocation.Y, _windowDetails.Width, _windowDetails.Height, true);
-                ShowWindow(_WindowHandleXaml, ShowWindowCommands.SW_SHOWNORMAL);
                 if (_windowDetails.State == AVWindowState.Normal)
                 {
                     ShowWindow(_WindowHandleMain, ShowWindowCommands.SW_SHOWNORMAL);
@@ -205,7 +206,7 @@ namespace ArnoldVinkStyles
                 _desktopWindowXamlSource.Content = frameworkElement;
 
                 //Allow background transparency
-                if (_windowDetails.BackgroundTransparency)
+                if (_windowDetails.Transparency)
                 {
                     IXamlSourceTransparency windowTransparency = Window.Current.As<IXamlSourceTransparency>();
                     windowTransparency.IsBackgroundTransparent(true);
@@ -215,8 +216,12 @@ namespace ArnoldVinkStyles
                 MSG lpMsg = new MSG();
                 while (GetMessageW(out lpMsg, IntPtr.Zero, 0, 0))
                 {
-                    TranslateMessage(ref lpMsg);
-                    DispatchMessageW(ref lpMsg);
+                    try
+                    {
+                        TranslateMessage(ref lpMsg);
+                        DispatchMessageW(ref lpMsg);
+                    }
+                    catch { }
                 }
 
                 //Return result
