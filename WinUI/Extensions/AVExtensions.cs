@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using WinRT;
@@ -89,6 +90,32 @@ namespace ArnoldVinkStyles
             {
                 Debug.WriteLine("Failed to check if is focusable: " + ex.Message);
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Note: ListView must be visible to successfully extract ListViewItem
+        /// </summary>
+        public static ListViewItem AVGetListViewItem<T>(this T targetListView, object targetItem) where T : ListView
+        {
+            try
+            {
+                //Alternative for ItemContainerGenerator.ContainerFromItem
+                //Check targetListView RenderSize?
+
+                //Update layout
+                targetListView.UpdateLayout();
+
+                //Get all list view items
+                List<ListViewItem> listViewItems = AVVisualTree.FindVisualChildren<ListViewItem>(targetListView);
+
+                //Search for target item
+                return listViewItems.Where(x => x.Content == targetItem).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to get ListViewItem: " + ex.Message);
+                return null;
             }
         }
     }
