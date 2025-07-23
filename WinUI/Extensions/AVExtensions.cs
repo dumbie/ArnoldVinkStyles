@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using WinRT;
 
 namespace ArnoldVinkStyles
@@ -116,6 +118,67 @@ namespace ArnoldVinkStyles
             {
                 Debug.WriteLine("Failed to get ListViewItem: " + ex.Message);
                 return null;
+            }
+        }
+
+        //Check if framework element is visible for user
+        public static bool AVVisibleUser<T>(this T elementTarget, FrameworkElement elementParent) where T : FrameworkElement
+        {
+            try
+            {
+                //Check framework element null
+                if (elementTarget == null)
+                {
+                    //Debug.WriteLine("Framework element target is null.");
+                    return false;
+                }
+                if (elementParent == null)
+                {
+                    //Debug.WriteLine("Framework element parent is null.");
+                    return false;
+                }
+
+                //Check framework element visibility
+                if (elementTarget.Visibility != Visibility.Visible)
+                {
+                    //Debug.WriteLine("Framework element target is not visible.");
+                    return false;
+                }
+                if (elementParent.Visibility != Visibility.Visible)
+                {
+                    //Debug.WriteLine("Framework element parent is not visible.");
+                    return false;
+                }
+
+                //Set and check render size
+                Rect rectTarget = new Rect();
+                rectTarget.Width = elementTarget.RenderSize.Width;
+                rectTarget.Height = elementTarget.RenderSize.Height;
+                if (rectTarget.Height == 0 || rectTarget.Width == 0)
+                {
+                    //Debug.WriteLine("Framework element target is not rendered.");
+                    return false;
+                }
+                Rect rectParent = new Rect();
+                rectParent.Width = elementParent.RenderSize.Width;
+                rectParent.Height = elementParent.RenderSize.Height;
+                if (rectParent.Height == 0 || rectParent.Width == 0)
+                {
+                    //Debug.WriteLine("Framework element parent is not rendered.");
+                    return false;
+                }
+
+                //Get rectangle transform bounds
+                GeneralTransform generalTransform = elementTarget.TransformToVisual(elementParent);
+                Rect rectBounds = generalTransform.TransformBounds(rectTarget);
+
+                //Check if rectangles intersect within
+                return (rectParent.Left <= rectBounds.Right) && (rectParent.Right >= rectBounds.Left) && (rectParent.Top <= rectBounds.Bottom) && (rectParent.Bottom >= rectBounds.Top);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed checking element user visibility: " + ex.Message);
+                return false;
             }
         }
     }
