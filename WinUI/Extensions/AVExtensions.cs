@@ -56,5 +56,40 @@ namespace ArnoldVinkStyles
                 return false;
             }
         }
+
+        public static bool AVFocusable<T>(this T frameworkElement) where T : FrameworkElement
+        {
+            try
+            {
+                //Check visibility
+                if (frameworkElement.Visibility != Visibility.Visible)
+                {
+                    return false;
+                }
+
+                //Convert to control
+                Control frameworkControl = frameworkElement.As<Control>();
+
+                //Check if disabled
+                if (!frameworkControl.IsEnabled)
+                {
+                    return false;
+                }
+
+                //Check tab stop
+                if (!frameworkControl.IsTabStop)
+                {
+                    return false;
+                }
+
+                //Return result
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to check if is focusable: " + ex.Message);
+                return false;
+            }
+        }
     }
 }
