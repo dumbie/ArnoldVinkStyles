@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using WinRT;
 
 namespace ArnoldVinkStyles
 {
@@ -21,9 +22,9 @@ namespace ArnoldVinkStyles
                     frameworkElement.Opacity = (double)opacity;
                 }
 
-                //Set content control enabled property
-                List<ContentControl> ccList = AVVisualTree.FindVisualChildren<ContentControl>(frameworkElement);
-                foreach (ContentControl cc in ccList)
+                //Set control enabled property
+                List<Control> ccList = AVVisualTree.FindVisualChildren<Control>(frameworkElement);
+                foreach (Control cc in ccList)
                 {
                     cc.IsEnabled = enabled;
                 }
@@ -31,6 +32,28 @@ namespace ArnoldVinkStyles
             catch (Exception ex)
             {
                 Debug.WriteLine("Failed to set IsEnabled property: " + ex.Message);
+            }
+        }
+
+        public static bool AVFocus<T>(this T frameworkElement) where T : FrameworkElement
+        {
+            try
+            {
+                //Convert to control
+                Control frameworkControl = frameworkElement.As<Control>();
+
+                //Focus on control
+                bool program = frameworkControl.Focus(FocusState.Programmatic);
+                bool pointer = frameworkControl.Focus(FocusState.Pointer);
+                bool keyboard = frameworkControl.Focus(FocusState.Keyboard);
+
+                //Return result
+                return program && pointer && keyboard;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to focus framework element: " + ex.Message);
+                return false;
             }
         }
     }
