@@ -13,7 +13,7 @@ namespace ArnoldVinkStyles
     public static partial class AVExtensions
     {
         /// <summary>
-        /// Extension to be able to disable Grid and StackPanel elements.
+        /// Disable child elements in Grid, StackPanel and other panels
         /// </summary>
         public static void AvIsEnabled<T>(this T frameworkElement, bool enabled, double? opacity) where T : FrameworkElement
         {
@@ -26,7 +26,7 @@ namespace ArnoldVinkStyles
                 }
 
                 //Set control enabled property
-                List<Control> ccList = AVVisualTree.FindVisualChildren<Control>(frameworkElement);
+                IEnumerable<Control> ccList = AVVisualTree.FindVisualChildren<Control>(frameworkElement);
                 foreach (Control cc in ccList)
                 {
                     cc.IsEnabled = enabled;
@@ -38,6 +38,9 @@ namespace ArnoldVinkStyles
             }
         }
 
+        /// <summary>
+        /// Focus on framework elements
+        /// </summary>
         public static bool AVFocus<T>(this T frameworkElement) where T : FrameworkElement
         {
             try
@@ -60,6 +63,9 @@ namespace ArnoldVinkStyles
             }
         }
 
+        /// <summary>
+        /// Check if framework element can be focused
+        /// </summary>
         public static bool AVFocusable<T>(this T frameworkElement) where T : FrameworkElement
         {
             try
@@ -96,6 +102,7 @@ namespace ArnoldVinkStyles
         }
 
         /// <summary>
+        /// Get ListViewItem control from ListViewItem object
         /// Note: ListView must be visible to successfully extract ListViewItem
         /// </summary>
         public static ListViewItem AVGetListViewItem<T>(this T targetListView, object targetItem) where T : ListView
@@ -108,7 +115,7 @@ namespace ArnoldVinkStyles
                 //Update layout
                 targetListView.UpdateLayout();
 
-                //Get all list view items
+                //Get all ListViewItem controls
                 List<ListViewItem> listViewItems = AVVisualTree.FindVisualChildren<ListViewItem>(targetListView);
 
                 //Search for target item
@@ -121,7 +128,47 @@ namespace ArnoldVinkStyles
             }
         }
 
-        //Check if framework element is visible for user
+        /// <summary>
+        /// Get main ScrollViewer from ListView
+        /// </summary>
+        public static ScrollViewer AVGetListViewScrollViewer<T>(this T targetListView) where T : ListView
+        {
+            try
+            {
+                //Check visibility
+                bool visibilityChanged = false;
+                Visibility visibilityOriginal = targetListView.Visibility;
+                if (visibilityOriginal != Visibility.Visible)
+                {
+                    visibilityChanged = true;
+                    targetListView.Visibility = Visibility.Visible;
+                }
+
+                //Update layout
+                targetListView.UpdateLayout();
+
+                //Get ScrollViewer
+                ScrollViewer scrollViewer = AVVisualTree.FindVisualChild<ScrollViewer>(targetListView);
+
+                //Check visibility
+                if (visibilityChanged)
+                {
+                    targetListView.Visibility = visibilityOriginal;
+                }
+
+                //Return result
+                return scrollViewer;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed getting ScrollViewer from ListView: " + ex.Message);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Check if framework element is visible for user
+        /// </summary>
         public static bool AVVisibleUser<T>(this T elementTarget, FrameworkElement elementParent) where T : FrameworkElement
         {
             try
