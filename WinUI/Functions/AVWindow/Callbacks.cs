@@ -13,8 +13,16 @@ namespace ArnoldVinkStyles
                 switch (messageCode)
                 {
                     case (int)WindowMessages.WM_CLOSE:
-                        DestroyWindow(hWnd);
-                        break;
+                        if (closeRequested != null)
+                        {
+                            closeRequested(this, null);
+                            return IntPtr.Zero;
+                        }
+                        else
+                        {
+                            DestroyWindow(hWnd);
+                            break;
+                        }
                     case (int)WindowMessages.WM_DESTROY:
                         PostQuitMessage(0);
                         break;

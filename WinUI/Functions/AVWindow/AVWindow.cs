@@ -17,6 +17,20 @@ namespace ArnoldVinkStyles
         private IntPtr _WindowHandleMain = IntPtr.Zero;
         private IntPtr _WindowHandleXaml = IntPtr.Zero;
 
+        /// <summary>
+        /// Event that triggers when window close request is received
+        /// </summary>
+        private event EventHandler closeRequested = null;
+        public EventHandler CloseRequested
+        {
+            get { return closeRequested; }
+            set
+            {
+                closeRequested = null;
+                closeRequested += value;
+            }
+        }
+
         //Initialize
         public AVWindow(AVWindowDetails windowDetails)
         {
