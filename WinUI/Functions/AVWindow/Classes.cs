@@ -87,6 +87,10 @@ namespace ArnoldVinkStyles
             /// Allows window background to be transparent
             /// </summary>
             public bool Transparency { get; set; } = false;
+            /// <summary>
+            /// Allow drag and dropping files into window
+            /// </summary>
+            public bool AllowDragDropFiles { get; set; } = false;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace ArnoldVinkStyles
                 }
 
                 //Set control enabled property
-                IEnumerable<Control> ccList = AVVisualTree.FindVisualChildren<Control>(frameworkElement);
+                List<Control> ccList = AVVisualTree.FindVisualChildren<Control>(frameworkElement);
                 foreach (Control cc in ccList)
                 {
                     cc.IsEnabled = enabled;

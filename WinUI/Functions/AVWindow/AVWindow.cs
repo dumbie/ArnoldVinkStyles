@@ -101,7 +101,7 @@ namespace ArnoldVinkStyles
 
                 //Prepare window styles
                 WindowStyles windowStyle = WindowStyles.WS_NONE;
-                WindowStylesEx windowStyleEx = WindowStylesEx.WS_EX_NONE;
+                WindowStylesEx windowStyleEx = WindowStylesEx.WS_EX_NOREDIRECTIONBITMAP;
                 if (_windowDetails.NoBorder)
                 {
                     windowStyle |= WindowStyles.WS_POPUPWINDOW;
@@ -133,6 +133,14 @@ namespace ArnoldVinkStyles
                 if (_windowDetails.TopMost)
                 {
                     windowStyleEx |= WindowStylesEx.WS_EX_TOPMOST;
+                }
+
+                //Allow window drag and drop files
+                if (_windowDetails.AllowDragDropFiles)
+                {
+                    windowStyleEx |= WindowStylesEx.WS_EX_ACCEPTFILES;
+                    ChangeWindowMessageFilterEx(_coreWindowHandle, WindowMessages.WM_DROPFILES, ChangeWindowMessageFilterAction.MSGFLT_ALLOW, IntPtr.Zero);
+                    ChangeWindowMessageFilterEx(_coreWindowHandle, WindowMessages.WM_COPYGLOBALDATA, ChangeWindowMessageFilterAction.MSGFLT_ALLOW, IntPtr.Zero);
                 }
 
                 //Set window styles
