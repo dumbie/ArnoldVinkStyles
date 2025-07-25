@@ -2,36 +2,20 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Windows.ApplicationModel.Core;
 using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Hosting;
 using WinRT;
+using static ArnoldVinkCode.AVInteropDll;
 
 namespace ArnoldVinkStyles
 {
     public partial class AVWindow
     {
-        //Variables
-        private AVWindowDetails _windowDetails = null;
-        private DesktopWindowXamlSource _desktopWindowXamlSource = null;
-        private IntPtr _WindowHandleMain = IntPtr.Zero;
-        private IntPtr _WindowHandleXaml = IntPtr.Zero;
-
         /// <summary>
-        /// Event that triggers when window close request is received
+        /// Create application window using provided details
         /// </summary>
-        private event EventHandler closeRequested = null;
-        public EventHandler CloseRequested
-        {
-            get { return closeRequested; }
-            set
-            {
-                closeRequested = null;
-                closeRequested += value;
-            }
-        }
-
-        //Initialize
         public AVWindow(AVWindowDetails windowDetails)
         {
             try
@@ -49,74 +33,75 @@ namespace ArnoldVinkStyles
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("AVWindowWinUI failed: " + ex.Message);
+                Debug.WriteLine("AVWindow failed: " + ex.Message);
             }
         }
 
+        /// <summary>
+        /// Get current window handle
+        /// </summary>
         public IntPtr GetHandle()
         {
-            return _WindowHandleMain;
+            return _coreWindowHandle;
         }
 
+        /// <summary>
+        /// Set current Window content
+        /// </summary>
         public void SetContent(FrameworkElement content)
         {
             try
             {
-                //Check DesktopWindowXamlSource
-                if (_desktopWindowXamlSource == null)
-                {
-                    return;
-                }
-
-                //Set DesktopWindowXamlSource content
-                _desktopWindowXamlSource.Content = content;
+                Window.Current.Content = content;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("SetContent failed: " + ex.Message);
+                Debug.WriteLine("Set window content failed: " + ex.Message);
             }
         }
 
+        //Create window
         private bool CreateWindow()
         {
             try
             {
                 Debug.WriteLine("Creating application window: " + _windowDetails.Title);
 
-                //Get current process handle
-                IntPtr processHandle = Process.GetCurrentProcess().Handle;
+                //Create core window
+                Guid coreWindowGuid = new Guid("79B9D5F2-879E-4B89-B798-79E47598030C");
+                PrivateCreateCoreWindow(CORE_WINDOW_TYPE.NOT_IMMERSIVE, _windowDetails.Title, 0, 0, 0, 0, 0, IntPtr.Zero, coreWindowGuid, out IntPtr coreWindowPointer);
+                CoreWindow coreWindow = CoreWindow.FromAbi(coreWindowPointer);
 
-                //Set window strings
-                string szWindowTitle = _windowDetails.Title;
-                string szWindowClass = "AVWindow" + new Random().NextInt64();
+                //Create core application view
+                CoreApplication.As<ICoreApplicationPrivate2>().CreateNonImmersiveView(out IntPtr coreApplicationViewPointer);
+                CoreApplicationView coreApplicationView = CoreApplicationView.FromAbi(coreApplicationViewPointer);
 
-                //Load window icon
-                IntPtr windowIcon = LoadIcon(_windowDetails.IconPath);
+                //Create framework view
+                FrameworkView frameworkView = new FrameworkView();
+                frameworkView.Initialize(coreApplicationView);
+                frameworkView.SetWindow(coreWindow);
 
-                //Prepare window class
-                WindowClassEx windowClassEx = new WindowClassEx();
-                windowClassEx.cbSize = (uint)Marshal.SizeOf(typeof(WindowClassEx));
-                windowClassEx.lpfnWndProc = WindowProc;
-                windowClassEx.hInstance = processHandle;
-                windowClassEx.hIcon = windowIcon;
-                windowClassEx.lpszClassName = szWindowClass;
-                if (_windowDetails.NoCloseButton)
-                {
-                    //Fix does not disable tray close button
-                    windowClassEx.style |= ClassStyles.CS_NOCLOSE;
-                }
+                //Get core window handle
+                ICoreWindowInterop coreWindowInterop = coreWindow.As<ICoreWindowInterop>();
+                coreWindowInterop.GetWindowHandle(out _coreWindowHandle);
 
-                //Register window class
-                IntPtr regResult = RegisterClassEx(ref windowClassEx);
-                if (regResult == IntPtr.Zero)
-                {
-                    Debug.WriteLine("RegisterClassEx failed.");
-                    return false;
-                }
+                //Set synchronization context
+                SynchronizationContext.SetSynchronizationContext(new DispatcherQueueSynchronizationContext(coreWindow.DispatcherQueue));
+                SynchronizationContext.SetSynchronizationContext(new DispatcherQueueSynchronizationContext(DispatcherQueue.GetForCurrentThread()));
 
-                //Prepare window creation
+                //Set custom window procedure
+                IntPtr windowProcPointer = Marshal.GetFunctionPointerForDelegate((WindowProcedureDelegate)WindowProcedure);
+                _coreWindowProcedure = SetWindowLongAuto(_coreWindowHandle, WindowLongFlags.GWL_WNDPROC, windowProcPointer);
+
+                //Convert type to framework element
+                FrameworkElement frameworkElement = (FrameworkElement)Activator.CreateInstance(_windowDetails.Type);
+
+                //Set framework element as content
+                Window.Current.Content = frameworkElement;
+
+                //Prepare window styles
                 WindowStyles windowStyle = WindowStyles.WS_NONE;
-                WindowStylesEx windowStyleEx = WindowStylesEx.WS_EX_NOREDIRECTIONBITMAP;
+                WindowStylesEx windowStyleEx = WindowStylesEx.WS_EX_NONE;
                 if (_windowDetails.NoBorder)
                 {
                     windowStyle |= WindowStyles.WS_POPUPWINDOW;
@@ -150,40 +135,18 @@ namespace ArnoldVinkStyles
                     windowStyleEx |= WindowStylesEx.WS_EX_TOPMOST;
                 }
 
-                //Create main window
-                _WindowHandleMain = CreateWindowEx(windowStyleEx, szWindowClass, szWindowTitle, windowStyle, 0, 0, 0, 0, IntPtr.Zero, IntPtr.Zero, processHandle, IntPtr.Zero);
-                if (_WindowHandleMain == IntPtr.Zero)
+                //Set window styles
+                SetWindowLongAuto(_coreWindowHandle, WindowLongFlags.GWL_STYLE, new IntPtr((uint)windowStyle));
+                SetWindowLongAuto(_coreWindowHandle, WindowLongFlags.GWL_EXSTYLE, new IntPtr((uint)windowStyleEx));
+
+                //Set window icon
+                IntPtr windowIcon = LoadIcon(_windowDetails.IconPath);
+                if (windowIcon != IntPtr.Zero)
                 {
-                    Debug.WriteLine("CreateWindowEx failed.");
-                    return false;
-                }
-
-                //Initialize XAML manager for current thread
-                WindowsXamlManager.InitializeForCurrentThread();
-
-                //Set synchronization context
-                SynchronizationContext.SetSynchronizationContext(new DispatcherQueueSynchronizationContext(DispatcherQueue.GetForCurrentThread()));
-
-                //Create desktop window xaml source
-                _desktopWindowXamlSource = new DesktopWindowXamlSource();
-
-                //Get native desktop window xaml source
-                IDesktopWindowXamlSourceNative2 desktopWindowXamlSourceNative = _desktopWindowXamlSource.As<IDesktopWindowXamlSourceNative2>();
-
-                //Attach DesktopWindowXamlSource to main window
-                int attachResult = desktopWindowXamlSourceNative.AttachToWindow(_WindowHandleMain);
-                if (attachResult < 0)
-                {
-                    Debug.WriteLine("AttachToWindow failed: " + attachResult);
-                    return false;
-                }
-
-                //Get DesktopWindowXamlSource window handle
-                _WindowHandleXaml = desktopWindowXamlSourceNative.GetWindowHandle();
-                if (_WindowHandleXaml == IntPtr.Zero)
-                {
-                    Debug.WriteLine("GetWindowHandle failed.");
-                    return false;
+                    IntPtr ICON_SMALL = 0;
+                    IntPtr ICON_BIG = 1;
+                    SendMessage(_coreWindowHandle, WindowMessages.WM_SETICON, ICON_SMALL, windowIcon);
+                    SendMessage(_coreWindowHandle, WindowMessages.WM_SETICON, ICON_BIG, windowIcon);
                 }
 
                 //Check minimum and maximum window size
@@ -193,50 +156,27 @@ namespace ArnoldVinkStyles
                 if (_windowDetails.MaxHeight != 0 && _windowDetails.Height > _windowDetails.MaxHeight) { _windowDetails.Height = _windowDetails.MaxHeight; }
 
                 //Get window location coordinates
-                POINT windowLocation = GetWindowLocationCoordinates();
+                WindowPoint windowLocation = GetWindowLocationCoordinates();
 
-                //Show xaml window and allow text input
-                SetWindowPos(_WindowHandleXaml, IntPtr.Zero, 0, 0, 0, 0, SetWindowPositions.SWP_SHOWWINDOW);
+                //Set window size and location
+                MoveWindow(_coreWindowHandle, windowLocation.X, windowLocation.Y, _windowDetails.Width, _windowDetails.Height, true);
 
-                //Show main window and update size and location
-                MoveWindow(_WindowHandleMain, windowLocation.X, windowLocation.Y, _windowDetails.Width, _windowDetails.Height, true);
+                //Show window in set state
                 if (_windowDetails.State == AVWindowState.Normal)
                 {
-                    ShowWindow(_WindowHandleMain, ShowWindowCommands.SW_SHOWNORMAL);
+                    ShowWindow(_coreWindowHandle, ShowWindowFlags.SW_SHOWNORMAL);
                 }
                 else if (_windowDetails.State == AVWindowState.Minimized)
                 {
-                    ShowWindow(_WindowHandleMain, ShowWindowCommands.SW_SHOWMINIMIZED);
+                    ShowWindow(_coreWindowHandle, ShowWindowFlags.SW_SHOWMINIMIZED);
                 }
                 else if (_windowDetails.State == AVWindowState.Maximized)
                 {
-                    ShowWindow(_WindowHandleMain, ShowWindowCommands.SW_SHOWMAXIMIZED);
+                    ShowWindow(_coreWindowHandle, ShowWindowFlags.SW_SHOWMAXIMIZED);
                 }
 
-                //Convert type to framework element
-                FrameworkElement frameworkElement = (FrameworkElement)Activator.CreateInstance(_windowDetails.Type);
-
-                //Set DesktopWindowXamlSource content
-                _desktopWindowXamlSource.Content = frameworkElement;
-
-                //Allow background transparency
-                if (_windowDetails.Transparency)
-                {
-                    IXamlSourceTransparency windowTransparency = Window.Current.As<IXamlSourceTransparency>();
-                    windowTransparency.IsBackgroundTransparent(true);
-                }
-
-                //Window message loop
-                MSG lpMsg = new MSG();
-                while (GetMessageW(out lpMsg, IntPtr.Zero, 0, 0))
-                {
-                    try
-                    {
-                        TranslateMessage(ref lpMsg);
-                        DispatchMessageW(ref lpMsg);
-                    }
-                    catch { }
-                }
+                //Run framework view
+                frameworkView.Run();
 
                 //Return result
                 Debug.WriteLine("Closed application window: " + _windowDetails.Title);

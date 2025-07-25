@@ -15,19 +15,19 @@ namespace ArnoldVinkStyles
             int GetTrustLevel(out IntPtr trustLevel);
         }
 
-        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("E3DCD8C7-3057-4692-99C3-7B7720AFDA31")]
-        public interface IDesktopWindowXamlSourceNative2
+        [GeneratedComInterface, Guid("45D64A29-A63E-4CB6-B498-5781D298CB4F")]
+        public partial interface ICoreWindowInterop
         {
-            int AttachToWindow(IntPtr parenthWnd);
-            IntPtr GetWindowHandle();
-            int PreTranslateMessage(ref MSG message, out bool result);
+            int GetWindowHandle(out IntPtr hWnd);
+            int SetMessageHandled([MarshalAs(UnmanagedType.Bool)] bool value);
         }
 
-        [GeneratedComInterface, Guid("06636C29-5A17-458D-8EA2-2422D997A922")]
-        public partial interface IXamlSourceTransparency : IInspectable
+        [GeneratedComInterface, Guid("6090202D-2843-4BA5-9B0D-FC88EECD9CE5")]
+        public partial interface ICoreApplicationPrivate2 : IInspectable
         {
-            [return: MarshalAs(UnmanagedType.Bool)] bool IsBackgroundTransparent();
-            void IsBackgroundTransparent([MarshalAs(UnmanagedType.Bool)] bool value);
+            int InitializeForAttach();
+            int WaitForActivate(out IntPtr coreWindow);
+            int CreateNonImmersiveView(out IntPtr coreApplicationView);
         }
     }
 }

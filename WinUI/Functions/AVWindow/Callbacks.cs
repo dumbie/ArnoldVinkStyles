@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using static ArnoldVinkCode.AVInteropDll;
 
 namespace ArnoldVinkStyles
 {
     public partial class AVWindow
     {
         //Callbacks
-        private IntPtr WindowProc(IntPtr hWnd, IntPtr messageCode, IntPtr wParam, IntPtr lParam)
+        private IntPtr WindowProcedure(IntPtr hWnd, IntPtr messageCode, IntPtr wParam, IntPtr lParam)
         {
             try
             {
@@ -18,21 +19,9 @@ namespace ArnoldVinkStyles
                             closeRequested(this, null);
                             return IntPtr.Zero;
                         }
-                        else
-                        {
-                            DestroyWindow(hWnd);
-                            break;
-                        }
-                    case (int)WindowMessages.WM_DESTROY:
-                        PostQuitMessage(0);
-                        break;
-                    case (int)WindowMessages.WM_SIZE:
-                    case (int)WindowMessages.WM_DPICHANGED:
-                        GetClientRect(hWnd, out RECT rectClient);
-                        MoveWindow(_WindowHandleXaml, 0, 0, rectClient.Right, rectClient.Bottom, true);
                         break;
                     case (int)WindowMessages.WM_GETMINMAXINFO:
-                        MINMAXINFO minMaxInfo = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
+                        WindowMinMaxInfo minMaxInfo = (WindowMinMaxInfo)Marshal.PtrToStructure(lParam, typeof(WindowMinMaxInfo));
                         if (_windowDetails.MinWidth != 0) { minMaxInfo.ptMinTrackSize.X = _windowDetails.MinWidth; }
                         if (_windowDetails.MinHeight != 0) { minMaxInfo.ptMinTrackSize.Y = _windowDetails.MinHeight; }
                         if (_windowDetails.MaxWidth != 0) { minMaxInfo.ptMaxTrackSize.X = _windowDetails.MaxWidth; }
@@ -42,7 +31,7 @@ namespace ArnoldVinkStyles
                 }
             }
             catch { }
-            return DefWindowProcW(hWnd, messageCode, wParam, lParam);
+            return CallWindowProcW(_coreWindowProcedure, hWnd, messageCode, wParam, lParam);
         }
     }
 }
