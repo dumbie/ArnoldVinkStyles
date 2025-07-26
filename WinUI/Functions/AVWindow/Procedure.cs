@@ -8,19 +8,16 @@ namespace ArnoldVinkStyles
 {
     public partial class AVWindow
     {
-        //Callbacks
-        private IntPtr WindowProcedure(IntPtr hWnd, IntPtr messageCode, IntPtr wParam, IntPtr lParam)
+        //Procedure
+        private IntPtr WindowProcedure(IntPtr hWnd, IntPtr message, IntPtr wParam, IntPtr lParam)
         {
+            bool messageHandled = false;
             try
             {
-                switch (messageCode)
+                switch (message)
                 {
                     case (int)WindowMessages.WM_CLOSE:
-                        if (closeRequested != null)
-                        {
-                            closeRequested();
-                            return IntPtr.Zero;
-                        }
+                        Handle_CloseRequest(ref messageHandled);
                         break;
                     case (int)WindowMessages.WM_GETMINMAXINFO:
                         Handle_WindowMinMaxInfo(lParam);
@@ -29,9 +26,49 @@ namespace ArnoldVinkStyles
                         Handle_DropFiles(wParam, lParam);
                         break;
                 }
+                Handle_ForwardMessage(hWnd, message, wParam, lParam, ref messageHandled);
             }
             catch { }
-            return CallWindowProcW(_coreWindowProcedure, hWnd, messageCode, wParam, lParam);
+            if (messageHandled)
+            {
+                return IntPtr.Zero;
+            }
+            else
+            {
+                return CallWindowProc(_coreWindowProcedure, hWnd, message, wParam, lParam);
+            }
+        }
+
+        private void Handle_ForwardMessage(IntPtr hWnd, IntPtr message, IntPtr wParam, IntPtr lParam, ref bool messageHandled)
+        {
+            try
+            {
+                if (forwardMessage != null)
+                {
+                    WindowMessage windowMessage = new WindowMessage()
+                    {
+                        hWnd = hWnd,
+                        message = message,
+                        wParam = wParam,
+                        lParam = lParam
+                    };
+                    forwardMessage(ref windowMessage, ref messageHandled);
+                }
+            }
+            catch { }
+        }
+
+        private void Handle_CloseRequest(ref bool messageHandled)
+        {
+            try
+            {
+                if (closeRequested != null)
+                {
+                    closeRequested();
+                    messageHandled = true;
+                }
+            }
+            catch { }
         }
 
         private void Handle_WindowMinMaxInfo(IntPtr lParam)

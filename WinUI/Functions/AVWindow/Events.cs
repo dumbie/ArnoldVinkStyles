@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static ArnoldVinkCode.AVInteropDll;
 
 namespace ArnoldVinkStyles
 {
@@ -31,6 +32,21 @@ namespace ArnoldVinkStyles
             {
                 filesDropped = null;
                 filesDropped += value;
+            }
+        }
+
+        /// <summary>
+        /// Event that forwards all window messages with bool to set handled
+        /// </summary>
+        public delegate void EventForwardMessage(ref WindowMessage windowMessage, ref bool messageHandled);
+        private event EventForwardMessage forwardMessage;
+        public EventForwardMessage ForwardMessage
+        {
+            get { return forwardMessage; }
+            set
+            {
+                forwardMessage = null;
+                forwardMessage += value;
             }
         }
     }
