@@ -151,10 +151,8 @@ namespace ArnoldVinkStyles
                 IntPtr windowIcon = LoadIcon(_windowDetails.IconPath);
                 if (windowIcon != IntPtr.Zero)
                 {
-                    IntPtr ICON_SMALL = 0;
-                    IntPtr ICON_BIG = 1;
-                    SendMessage(_coreWindowHandle, WindowMessages.WM_SETICON, ICON_SMALL, windowIcon);
-                    SendMessage(_coreWindowHandle, WindowMessages.WM_SETICON, ICON_BIG, windowIcon);
+                    SetClassLongAuto(_coreWindowHandle, ClassLongFlags.GCL_HICON, windowIcon);
+                    SetClassLongAuto(_coreWindowHandle, ClassLongFlags.GCL_HICONSM, windowIcon);
                 }
 
                 //Check minimum and maximum window size
