@@ -13,9 +13,9 @@ namespace ArnoldVinkStyles
     public static partial class AVExtensions
     {
         /// <summary>
-        /// Disable child elements in Grid, StackPanel and other panels
+        /// Enable or disable child elements in Grid, StackPanel and other panels
         /// </summary>
-        public static void AvIsEnabled<T>(this T frameworkElement, bool enabled, double? opacity) where T : FrameworkElement
+        public static void AvSetEnabled<T>(this T frameworkElement, bool enabled, double? opacity) where T : FrameworkElement
         {
             try
             {
@@ -85,10 +85,18 @@ namespace ArnoldVinkStyles
                     return false;
                 }
 
+                //Check if container
+                bool elementPanel = frameworkElement is Panel;
+                bool elementItemsControl = frameworkElement is ItemsControl;
+                bool containerControl = elementPanel || elementItemsControl;
+
                 //Check tab stop
-                if (!frameworkControl.IsTabStop)
+                if (!containerControl)
                 {
-                    return false;
+                    if (!frameworkControl.IsTabStop)
+                    {
+                        return false;
+                    }
                 }
 
                 //Return result
