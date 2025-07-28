@@ -53,6 +53,23 @@ namespace ArnoldVinkStyles
         }
 
         /// <summary>
+        /// Returns if window is currently maximized
+        /// </summary>
+        public bool IsMaximized
+        {
+            get
+            {
+                try
+                {
+                    WindowStyles windowStyle = (WindowStyles)GetWindowLongAuto(_coreWindowHandle, WindowLongFlags.GWL_STYLE).ToInt64();
+                    return windowStyle.HasFlag(WindowStyles.WS_MAXIMIZE);
+                }
+                catch { }
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Show window
         /// </summary>
         public void Show()
