@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using static ArnoldVinkCode.AVInteropDll;
 
@@ -10,7 +11,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get icon from file type
-        private static BitmapImage GetBitmapImageFromFileType(string fileType, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> GetBitmapImageFromFileType(string fileType, int imageWidth, int imageHeight)
         {
             IntPtr iconHandle = IntPtr.Zero;
             try
@@ -40,10 +41,11 @@ namespace ArnoldVinkStyles
                 }
 
                 //Convert to bitmap
-                Bitmap bitmap = Icon.FromHandle(iconHandle).ToBitmap();
-
-                //Convert to bitmap image
-                return BitmapToBitmapImage(ref bitmap, imageWidth, imageHeight);
+                using (Bitmap bitmap = Icon.FromHandle(iconHandle).ToBitmap())
+                {
+                    //Convert to bitmap image
+                    return await BitmapToBitmapImage(bitmap, imageWidth, imageHeight);
+                }
             }
             catch (Exception ex)
             {

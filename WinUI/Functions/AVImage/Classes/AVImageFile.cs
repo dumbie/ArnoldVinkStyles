@@ -9,6 +9,7 @@ namespace ArnoldVinkStyles
         public class AVImageFile
         {
             public CoreDispatcher Dispatcher { get; set; } = null;
+            public byte[] ImageBytes { get; set; } = null;
             public string[] FilePaths { get; set; } = [];
             public string BackupPath { get; set; } = string.Empty;
             public SearchSource[] SearchPaths { get; set; } = [];

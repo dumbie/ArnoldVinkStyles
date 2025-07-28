@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using static ArnoldVinkCode.AVInteropDll;
 
@@ -13,7 +14,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get icon from executable file
-        private static BitmapImage GetBitmapImageFromExecutable(string exeFilePath, int iconIndex, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> GetBitmapImageFromExecutable(string exeFilePath, int iconIndex, int imageWidth, int imageHeight)
         {
             IntPtr iconHandle = IntPtr.Zero;
             IntPtr libraryHandle = IntPtr.Zero;
@@ -93,10 +94,12 @@ namespace ArnoldVinkStyles
                     iconHandle = CreateIconFromResourceEx(iconBytes, (uint)iconBytes.Length, true, IconVersion.Windows3x, iconDirEntry.bWidth, iconDirEntry.bHeight, IconResourceFlags.LR_DEFAULTCOLOR);
 
                     //Convert to bitmap
-                    Bitmap bitmap = Icon.FromHandle(iconHandle).ToBitmap();
+                    using (Bitmap bitmap = Icon.FromHandle(iconHandle).ToBitmap())
+                    {
 
-                    //Convert to bitmap image
-                    return BitmapToBitmapImage(ref bitmap, imageWidth, imageHeight);
+                        //Convert to bitmap image
+                        return await BitmapToBitmapImage(bitmap, imageWidth, imageHeight);
+                    }
                 }
                 else
                 {
@@ -104,10 +107,11 @@ namespace ArnoldVinkStyles
                     using (MemoryStream memoryStreamIcon = new MemoryStream(iconBytes))
                     {
                         //Convert image data to bitmap
-                        Bitmap bitmap = new Bitmap(memoryStreamIcon);
-
-                        //Convert to bitmap image
-                        return BitmapToBitmapImage(ref bitmap, imageWidth, imageHeight);
+                        using (Bitmap bitmap = new Bitmap(memoryStreamIcon))
+                        {
+                            //Convert to bitmap image
+                            return await BitmapToBitmapImage(bitmap, imageWidth, imageHeight);
+                        }
                     }
                 }
             }

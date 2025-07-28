@@ -40,7 +40,7 @@ namespace ArnoldVinkStyles
                         BitmapFrameOrder bitmapFrameLargest = bitmapFrames.OrderBy(x => x.PixelWidth).ThenBy(x => x.ThumbnailSize).LastOrDefault();
 
                         //Convert image stream to bitmap image
-                        return RandomAccessStreamToBitmapImage(bitmapFrameLargest.ThumbnailImageStream, imageWidth, imageHeight);
+                        return await RandomAccessStreamToBitmapImage(bitmapFrameLargest.ThumbnailImageStream, imageWidth, imageHeight);
                     }
                 }
             }

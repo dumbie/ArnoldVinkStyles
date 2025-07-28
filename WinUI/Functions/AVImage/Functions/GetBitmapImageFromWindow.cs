@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using static ArnoldVinkCode.AVInteropDll;
 
@@ -9,34 +10,28 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get window icon from process window
-        private static BitmapImage GetBitmapImageFromWindow(IntPtr windowHandle, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> GetBitmapImageFromWindow(IntPtr windowHandle, int imageWidth, int imageHeight)
         {
             IntPtr iconHandle = IntPtr.Zero;
             try
             {
-                int GCL_HICON = -14;
-                int GCL_HICONSM = -34;
-                int ICON_SMALL = 0;
-                int ICON_BIG = 1;
-                int ICON_SMALL2 = 2;
-
                 //Locks thread when target window is not responding
-                iconHandle = SendMessage(windowHandle, WindowMessages.WM_GETICON, ICON_BIG, 0);
+                iconHandle = SendMessage(windowHandle, WindowMessages.WM_GETICON, (int)GetSetIconFlags.ICON_BIG, 0);
                 if (iconHandle == IntPtr.Zero)
                 {
-                    iconHandle = SendMessage(windowHandle, WindowMessages.WM_GETICON, ICON_SMALL, 0);
+                    iconHandle = SendMessage(windowHandle, WindowMessages.WM_GETICON, (int)GetSetIconFlags.ICON_SMALL, 0);
                 }
                 if (iconHandle == IntPtr.Zero)
                 {
-                    iconHandle = SendMessage(windowHandle, WindowMessages.WM_GETICON, ICON_SMALL2, 0);
+                    iconHandle = SendMessage(windowHandle, WindowMessages.WM_GETICON, (int)GetSetIconFlags.ICON_SMALL2, 0);
                 }
                 if (iconHandle == IntPtr.Zero)
                 {
-                    iconHandle = GetClassLongAuto(windowHandle, GCL_HICON);
+                    iconHandle = GetClassLongAuto(windowHandle, ClassLongFlags.GCL_HICON);
                 }
                 if (iconHandle == IntPtr.Zero)
                 {
-                    iconHandle = GetClassLongAuto(windowHandle, GCL_HICONSM);
+                    iconHandle = GetClassLongAuto(windowHandle, ClassLongFlags.GCL_HICONSM);
                 }
                 if (iconHandle == IntPtr.Zero)
                 {
@@ -44,10 +39,11 @@ namespace ArnoldVinkStyles
                 }
 
                 //Convert to bitmap
-                Bitmap bitmap = Icon.FromHandle(iconHandle).ToBitmap();
-
-                //Convert to bitmap image
-                return BitmapToBitmapImage(ref bitmap, imageWidth, imageHeight);
+                using (Bitmap bitmap = Icon.FromHandle(iconHandle).ToBitmap())
+                {
+                    //Convert to bitmap image
+                    return await BitmapToBitmapImage(bitmap, imageWidth, imageHeight);
+                }
             }
             catch (Exception ex)
             {

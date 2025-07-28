@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace ArnoldVinkStyles
@@ -7,11 +8,11 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get BitmapImage from Bytes
-        public static BitmapImage GetBitmapImageFromBytes(byte[] sourceBytes, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> GetBitmapImageFromBytes(byte[] sourceBytes, int imageWidth, int imageHeight)
         {
             try
             {
-                return BytesToBitmapImage(sourceBytes, imageWidth, imageHeight);
+                return await BytesToBitmapImage(sourceBytes, imageWidth, imageHeight);
             }
             catch (Exception ex)
             {

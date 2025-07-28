@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using static ArnoldVinkCode.AVInteropDll;
 using static ArnoldVinkCode.AVShell;
@@ -12,7 +11,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get BitmapImage from shell file
-        private static BitmapImage GetBitmapImageFromShellFile(string filePath, int imageWidth, int imageHeight, bool iconOnly)
+        private static async Task<BitmapImage> GetBitmapImageFromShellFile(string filePath, int imageWidth, int imageHeight, bool iconOnly)
         {
             IntPtr bitmapPointer = IntPtr.Zero;
             try
@@ -37,15 +36,7 @@ namespace ArnoldVinkStyles
                 SIIGBF extractFlags = SIIGBF.SIIGBF_BIGGERSIZEOK | (iconOnly ? SIIGBF.SIIGBF_ICONONLY : SIIGBF.SIIGBF_THUMBNAILONLY);
 
                 //Get bitmap pointer
-                try
-                {
-                    shellItem.GetImage(bitmapSize, extractFlags, out bitmapPointer);
-                }
-                catch (COMException ex)
-                {
-                    //Fix WTS_E_FAILEDEXTRACTION error when loading files from OneDrive
-                    Debug.WriteLine("Shell file failed to extract: " + (WTS_EXCEPTIONS)ex.HResult + " / " + filePath);
-                }
+                shellItem.GetImage(bitmapSize, extractFlags, out bitmapPointer);
 
                 //Check bitmap pointer
                 if (bitmapPointer == IntPtr.Zero)
@@ -55,14 +46,18 @@ namespace ArnoldVinkStyles
                 }
 
                 //Convert pointer to bitmap
-                Bitmap sourceBitmap = Bitmap.FromHbitmap(bitmapPointer);
-                sourceBitmap.MakeTransparent(); //Fix transparency issue
+                using (Bitmap sourceBitmap = Bitmap.FromHbitmap(bitmapPointer))
+                {
+                    //Make bitmap transparent
+                    sourceBitmap.MakeTransparent(); //Fix transparency issue
 
-                //Convert to bitmap image
-                return BitmapToBitmapImage(ref sourceBitmap, imageWidth, imageHeight);
+                    //Convert to bitmap image
+                    return await BitmapToBitmapImage(sourceBitmap, imageWidth, imageHeight);
+                }
             }
             catch (Exception ex)
             {
+                //Fix WTS_E_FAILEDEXTRACTION error when loading files from OneDrive
                 Debug.WriteLine("Shell file failed to load: " + filePath + " / " + ex.Message);
                 return null;
             }

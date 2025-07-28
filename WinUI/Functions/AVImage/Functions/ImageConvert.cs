@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -10,7 +11,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Convert Bitmap to RandomAccessStream
-        private static IRandomAccessStream BitmapToRandomAccessStream(ref Bitmap sourceBitmap)
+        private static IRandomAccessStream BitmapToRandomAccessStream(Bitmap sourceBitmap)
         {
             try
             {
@@ -19,9 +20,6 @@ namespace ArnoldVinkStyles
 
                 //Save bitmap frame
                 sourceBitmap.Save(memoryStream, ImageFormat.Png);
-
-                //Dispose bitmap frame
-                sourceBitmap.Dispose();
 
                 //Set memory stream position
                 memoryStream.Position = 0;
@@ -34,7 +32,7 @@ namespace ArnoldVinkStyles
         }
 
         //Convert Bitmap to BitmapImage
-        private static BitmapImage BitmapToBitmapImage(ref Bitmap sourceBitmap, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> BitmapToBitmapImage(Bitmap sourceBitmap, int imageWidth, int imageHeight)
         {
             try
             {
@@ -42,10 +40,10 @@ namespace ArnoldVinkStyles
                 BitmapImage imageToBitmapImage = BeginBitmapImage(imageWidth, imageHeight);
 
                 //Save bitmap to random access stream
-                IRandomAccessStream randomAccessStream = BitmapToRandomAccessStream(ref sourceBitmap);
+                IRandomAccessStream randomAccessStream = BitmapToRandomAccessStream(sourceBitmap);
 
                 //Set bitmap image stream source
-                imageToBitmapImage.SetSource(randomAccessStream);
+                await imageToBitmapImage.SetSourceAsync(randomAccessStream);
 
                 //Return application bitmap image
                 return EndBitmapImage(imageToBitmapImage, ref randomAccessStream);
@@ -74,7 +72,7 @@ namespace ArnoldVinkStyles
         }
 
         //Convert Bytes to BitmapImage
-        private static BitmapImage BytesToBitmapImage(byte[] sourceBytes, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> BytesToBitmapImage(byte[] sourceBytes, int imageWidth, int imageHeight)
         {
             try
             {
@@ -86,7 +84,7 @@ namespace ArnoldVinkStyles
                 IRandomAccessStream randomAccessStream = memoryStream.AsRandomAccessStream();
 
                 //Set bitmap image stream source
-                imageToBitmapImage.SetSource(randomAccessStream);
+                await imageToBitmapImage.SetSourceAsync(randomAccessStream);
 
                 //Return application bitmap image
                 return EndBitmapImage(imageToBitmapImage, ref randomAccessStream);
@@ -96,7 +94,7 @@ namespace ArnoldVinkStyles
         }
 
         //Convert RandomAccessStream to BitmapImage
-        private static BitmapImage RandomAccessStreamToBitmapImage(IRandomAccessStream sourceStream, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> RandomAccessStreamToBitmapImage(IRandomAccessStream sourceStream, int imageWidth, int imageHeight)
         {
             try
             {
@@ -104,7 +102,7 @@ namespace ArnoldVinkStyles
                 BitmapImage imageToBitmapImage = BeginBitmapImage(imageWidth, imageHeight);
 
                 //Set bitmap image stream source
-                imageToBitmapImage.SetSource(sourceStream);
+                await imageToBitmapImage.SetSourceAsync(sourceStream);
 
                 //Return application bitmap image
                 return EndBitmapImage(imageToBitmapImage, ref sourceStream);
