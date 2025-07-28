@@ -37,29 +37,6 @@ namespace ArnoldVinkStyles
             }
         }
 
-        /// <summary>
-        /// Get current window handle
-        /// </summary>
-        public IntPtr GetHandle()
-        {
-            return _coreWindowHandle;
-        }
-
-        /// <summary>
-        /// Set current Window content
-        /// </summary>
-        public void SetContent(FrameworkElement content)
-        {
-            try
-            {
-                Window.Current.Content = content;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Set window content failed: " + ex.Message);
-            }
-        }
-
         //Create window
         private bool CreateWindow()
         {

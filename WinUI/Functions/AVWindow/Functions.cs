@@ -4,13 +4,96 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using Windows.Graphics.Display;
+using Windows.UI.Xaml;
 using static ArnoldVinkCode.AVInteropDll;
 
 namespace ArnoldVinkStyles
 {
     public partial class AVWindow
     {
-        //Functions
+        /// <summary>
+        /// Minimize window
+        /// </summary>
+        public void Minimize()
+        {
+            try
+            {
+                ShowWindow(_coreWindowHandle, ShowWindowFlags.SW_SHOWMINIMIZED);
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Returns if window is currently minimized
+        /// </summary>
+        public bool IsMinimized
+        {
+            get
+            {
+                try
+                {
+                    WindowStyles windowStyle = (WindowStyles)GetWindowLongAuto(_coreWindowHandle, WindowLongFlags.GWL_STYLE).ToInt64();
+                    return windowStyle.HasFlag(WindowStyles.WS_MINIMIZE);
+                }
+                catch { }
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Maximize window
+        /// </summary>
+        public void Maximize()
+        {
+            try
+            {
+                ShowWindow(_coreWindowHandle, ShowWindowFlags.SW_SHOWMAXIMIZED);
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Show window
+        /// </summary>
+        public void Show()
+        {
+            try
+            {
+                ShowWindow(_coreWindowHandle, ShowWindowFlags.SW_SHOWNORMAL);
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Get current window handle
+        /// </summary>
+        public IntPtr GetHandle()
+        {
+            try
+            {
+                return _coreWindowHandle;
+            }
+            catch
+            {
+                return IntPtr.Zero;
+            }
+        }
+
+        /// <summary>
+        /// Set current Window content
+        /// </summary>
+        public void SetContent(FrameworkElement content)
+        {
+            try
+            {
+                Window.Current.Content = content;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Set window content failed: " + ex.Message);
+            }
+        }
+
         private IntPtr LoadIcon(string iconPath)
         {
             try
