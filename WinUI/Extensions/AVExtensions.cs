@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -106,71 +105,6 @@ namespace ArnoldVinkStyles
             {
                 Debug.WriteLine("Failed to check if is focusable: " + ex.Message);
                 return false;
-            }
-        }
-
-        /// <summary>
-        /// Get ListViewItem control from ListViewItem object
-        /// Note: ListView must be visible to successfully extract ListViewItem
-        /// </summary>
-        public static ListViewItem AVGetListViewItem<T>(this T targetListView, object targetItem) where T : ListView
-        {
-            try
-            {
-                //Alternative for ItemContainerGenerator.ContainerFromItem
-                //Check targetListView RenderSize?
-
-                //Update layout
-                targetListView.UpdateLayout();
-
-                //Get all ListViewItem controls
-                List<ListViewItem> listViewItems = AVVisualTree.FindVisualChildren<ListViewItem>(targetListView);
-
-                //Search for target item
-                return listViewItems.Where(x => x.Content == targetItem).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Failed to get ListViewItem: " + ex.Message);
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Get main ScrollViewer from ListView
-        /// </summary>
-        public static ScrollViewer AVGetListViewScrollViewer<T>(this T targetListView) where T : ListView
-        {
-            try
-            {
-                //Check visibility
-                bool visibilityChanged = false;
-                Visibility visibilityOriginal = targetListView.Visibility;
-                if (visibilityOriginal != Visibility.Visible)
-                {
-                    visibilityChanged = true;
-                    targetListView.Visibility = Visibility.Visible;
-                }
-
-                //Update layout
-                targetListView.UpdateLayout();
-
-                //Get ScrollViewer
-                ScrollViewer scrollViewer = AVVisualTree.FindVisualChild<ScrollViewer>(targetListView);
-
-                //Check visibility
-                if (visibilityChanged)
-                {
-                    targetListView.Visibility = visibilityOriginal;
-                }
-
-                //Return result
-                return scrollViewer;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Failed getting ScrollViewer from ListView: " + ex.Message);
-                return null;
             }
         }
 
