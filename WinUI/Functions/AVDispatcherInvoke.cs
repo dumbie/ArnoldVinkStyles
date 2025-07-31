@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
 
 namespace ArnoldVinkStyles
 {
     public partial class AVDispatcherInvoke
     {
         ///<param name="actionRun">void DispatchAction() { void(); }</param>
-        ///<example>DispatcherInvoke(this, DispatchAction);</example>
-        ///<example>DispatcherInvoke(this, delegate { void(); });</example>
+        ///<example>DispatcherInvoke(this.Dispatcher, DispatchAction);</example>
+        ///<example>DispatcherInvoke(this.Dispatcher, delegate { void(); });</example>
         ///<summary>Don't forget to use try and catch to improve stability</summary>
-        public static void DispatcherInvoke(FrameworkElement frameworkElement, Action actionRun)
+        public static void DispatcherInvoke(CoreDispatcher dispatcher, Action actionRun)
         {
             try
             {
-                CoreDispatcher dispatcher = frameworkElement.Dispatcher;
                 if (dispatcher.HasThreadAccess)
                 {
                     actionRun();
@@ -29,14 +27,13 @@ namespace ArnoldVinkStyles
         }
 
         ///<param name="actionRun">async Task DispatchAction() { await void(); }</param>
-        ///<example>await DispatcherInvoke(this, DispatchAction);</example>
-        ///<example>await DispatcherInvoke(this, async delegate { await void(); });</example>
+        ///<example>await DispatcherInvoke(this.Dispatcher, DispatchAction);</example>
+        ///<example>await DispatcherInvoke(this.Dispatcher, async delegate { await void(); });</example>
         ///<summary>Don't forget to use try and catch to improve stability</summary>
-        public static async Task DispatcherInvoke(FrameworkElement frameworkElement, Func<Task> actionRun)
+        public static async Task DispatcherInvoke(CoreDispatcher dispatcher, Func<Task> actionRun)
         {
             try
             {
-                CoreDispatcher dispatcher = frameworkElement.Dispatcher;
                 if (dispatcher.HasThreadAccess)
                 {
                     await actionRun();
