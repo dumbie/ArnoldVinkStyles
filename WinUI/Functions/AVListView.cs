@@ -21,7 +21,7 @@ namespace ArnoldVinkStyles
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Failed to get ListView item index: " + ex.Message);
+                Debug.WriteLine("Failed to get ListViewItem index: " + ex.Message);
                 return -1;
             }
         }
@@ -45,6 +45,23 @@ namespace ArnoldVinkStyles
             catch (Exception ex)
             {
                 Debug.WriteLine("Failed to get clicked ListViewItem container: " + ex.Message);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Get focused ListViewItem object
+        /// </summary>
+        public static T GetFocusedListViewItemObject<T>(ListView targetListView) where T : class
+        {
+            try
+            {
+                ListViewItem focusedContainer = GetFocusedListViewItemContainer(targetListView);
+                return GetListViewItemObjectFromContainer<T>(focusedContainer);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to get focused ListViewItem object: " + ex.Message);
                 return null;
             }
         }
