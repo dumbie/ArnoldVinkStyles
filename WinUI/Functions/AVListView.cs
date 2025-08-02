@@ -27,9 +27,26 @@ namespace ArnoldVinkStyles
         }
 
         /// <summary>
-        /// Get clicked ListViewItem container
+        /// Get routed ListViewItem object
         /// </summary>
-        public static ListViewItem GetClickedListViewItemContainer(RoutedEventArgs e)
+        public static T GetRoutedListViewItemObject<T>(RoutedEventArgs e) where T : class
+        {
+            try
+            {
+                ListViewItem routedContainer = GetRoutedListViewItemContainer(e);
+                return GetListViewItemObjectFromContainer<T>(routedContainer);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to get routed ListViewItem object: " + ex.Message);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Get routed ListViewItem container
+        /// </summary>
+        public static ListViewItem GetRoutedListViewItemContainer(RoutedEventArgs e)
         {
             try
             {
