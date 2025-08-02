@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using static ArnoldVinkStyles.AVVisualTree;
 
 namespace ArnoldVinkStyles
@@ -182,6 +184,53 @@ namespace ArnoldVinkStyles
                 Debug.WriteLine("Failed getting ScrollViewer from ListView: " + ex.Message);
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Automatically select currently focused item
+        /// Usage: listView.GotFocus += ListViewEvent_Select_Focused_Item;
+        /// </summary>
+        public static void ListViewEvent_Select_Focused_Item(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                object focusItem = GetRoutedListViewItemObject<object>(e);
+                ListView listView = (ListView)sender;
+                listView.SelectedItem = focusItem;
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Block scrollviewer from moving when using arrow keys
+        /// Usage: listView.PreviewKeyDown += ListViewEvent_Block_Scroll;
+        /// </summary>
+        public static void ListViewEvent_Block_Scroll(object sender, KeyRoutedEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Windows.System.VirtualKey.Up)
+                {
+                    e.Handled = true;
+                    FocusManager.TryMoveFocus(FocusNavigationDirection.Up);
+                }
+                else if (e.Key == Windows.System.VirtualKey.Down)
+                {
+                    e.Handled = true;
+                    FocusManager.TryMoveFocus(FocusNavigationDirection.Down);
+                }
+                else if (e.Key == Windows.System.VirtualKey.Left)
+                {
+                    e.Handled = true;
+                    FocusManager.TryMoveFocus(FocusNavigationDirection.Left);
+                }
+                else if (e.Key == Windows.System.VirtualKey.Right)
+                {
+                    e.Handled = true;
+                    FocusManager.TryMoveFocus(FocusNavigationDirection.Right);
+                }
+            }
+            catch { }
         }
     }
 }
