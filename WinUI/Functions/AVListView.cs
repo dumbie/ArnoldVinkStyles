@@ -186,6 +186,112 @@ namespace ArnoldVinkStyles
             }
         }
 
+        //Check ListViewItem column position
+        public static bool ListViewItemColumnPosition(ListView targetListView, ListViewItem targetListViewItem, bool firstColumn)
+        {
+            try
+            {
+                ListViewCountColumns(targetListView, out int totalCount, out List<double> offsetPoints);
+                double translatePoint = targetListViewItem.TransformToVisual(targetListView).TransformPoint(new Point(0, 0)).Y;
+                if (firstColumn)
+                {
+                    if (translatePoint == offsetPoints.FirstOrDefault())
+                    {
+                        //Debug.WriteLine("ListViewItem is in first column.");
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (translatePoint == offsetPoints.LastOrDefault())
+                    {
+                        //Debug.WriteLine("ListViewItem is in last column.");
+                        return true;
+                    }
+                }
+            }
+            catch { }
+            return false;
+        }
+
+        //Check ListViewItem row position
+        public static bool ListViewItemRowPosition(ListView targetListView, ListViewItem targetListViewItem, bool firstRow)
+        {
+            try
+            {
+                ListViewCountRows(targetListView, out int totalCount, out List<double> offsetPoints);
+                double translatePoint = targetListViewItem.TransformToVisual(targetListView).TransformPoint(new Point(0, 0)).X;
+                if (firstRow)
+                {
+                    if (translatePoint == offsetPoints.FirstOrDefault())
+                    {
+                        //Debug.WriteLine("ListViewItem is in first row.");
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (translatePoint == offsetPoints.LastOrDefault())
+                    {
+                        //Debug.WriteLine("ListViewItem is in last row.");
+                        return true;
+                    }
+                }
+            }
+            catch { }
+            return false;
+        }
+
+        //Count columns in ListView
+        public static void ListViewCountColumns(ListView targetListView, out int totalCount, out List<double> offsetPoints)
+        {
+            totalCount = 0;
+            offsetPoints = new List<double>();
+            try
+            {
+                foreach (object listItem in targetListView.Items)
+                {
+                    ListViewItem listViewItem = AVListView.GetListViewItemContainerFromObject(targetListView, listItem);
+                    double translatePoint = listViewItem.TransformToVisual(targetListView).TransformPoint(new Point(0, 0)).Y;
+                    if (!offsetPoints.Any(x => x == translatePoint))
+                    {
+                        totalCount++;
+                        offsetPoints.Add(translatePoint);
+                    }
+                }
+                //Debug.WriteLine("ListViewCountColumns: " + totalCount);
+            }
+            catch
+            {
+                Debug.WriteLine("Failed to count columns from ListView.");
+            }
+        }
+
+        //Count rows in ListView
+        public static void ListViewCountRows(ListView targetListView, out int totalCount, out List<double> offsetPoints)
+        {
+            totalCount = 0;
+            offsetPoints = new List<double>();
+            try
+            {
+                foreach (object listItem in targetListView.Items)
+                {
+                    ListViewItem listViewItem = AVListView.GetListViewItemContainerFromObject(targetListView, listItem);
+                    double translatePoint = listViewItem.TransformToVisual(targetListView).TransformPoint(new Point(0, 0)).X;
+                    if (!offsetPoints.Any(x => x == translatePoint))
+                    {
+                        totalCount++;
+                        offsetPoints.Add(translatePoint);
+                    }
+                }
+                //Debug.WriteLine("ListViewCountRows: " + totalCount);
+            }
+            catch
+            {
+                Debug.WriteLine("Failed to count rows from ListView.");
+            }
+        }
+
         /// <summary>
         /// Automatically select currently focused item
         /// Usage: listView.GotFocus += ListViewEvent_Select_Focused_Item;
