@@ -139,7 +139,7 @@ namespace ArnoldVinkStyles
                 if (_windowDetails.MaxHeight != 0 && _windowDetails.Height > _windowDetails.MaxHeight) { _windowDetails.Height = _windowDetails.MaxHeight; }
 
                 //Get window location coordinates
-                WindowPoint windowLocation = GetWindowLocationCoordinates();
+                WindowPoint windowLocation = GetWindowTargetLocation();
 
                 //Set window size and location
                 MoveWindow(_coreWindowHandle, windowLocation.X, windowLocation.Y, _windowDetails.Width, _windowDetails.Height, true);

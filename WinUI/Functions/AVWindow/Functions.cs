@@ -140,7 +140,24 @@ namespace ArnoldVinkStyles
             }
         }
 
-        private WindowPoint GetWindowLocationCoordinates()
+        /// <summary>
+        /// Get current window location and size
+        /// </summary>
+        public WindowRectangle GetWindowLocationSize()
+        {
+            try
+            {
+                GetWindowRect(_coreWindowHandle, out WindowRectangle windowRectangle);
+                return windowRectangle;
+            }
+            catch
+            {
+                return new WindowRectangle();
+            }
+        }
+
+        //Get target window location
+        private WindowPoint GetWindowTargetLocation()
         {
             try
             {
