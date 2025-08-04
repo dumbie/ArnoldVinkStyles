@@ -303,7 +303,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <ScrollViewer Style="{ThemeResource ScrollViewerVertical}">
+                    <ScrollViewer x:Name="ScrollViewer" Style="{ThemeResource ScrollViewerVertical}">
                         <ItemsPresenter/>
                     </ScrollViewer>
                 </ControlTemplate>
@@ -347,7 +347,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <ScrollViewer Style="{ThemeResource ScrollViewerHorizontal}">
+                    <ScrollViewer x:Name="ScrollViewer" Style="{ThemeResource ScrollViewerHorizontal}">
                         <ItemsPresenter/>
                     </ScrollViewer>
                 </ControlTemplate>
@@ -370,7 +370,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <ScrollViewer Style="{ThemeResource ScrollViewerHorizontal}">
+                    <ScrollViewer x:Name="ScrollViewer" Style="{ThemeResource ScrollViewerHorizontal}">
                         <ItemsPresenter/>
                     </ScrollViewer>
                 </ControlTemplate>
@@ -414,7 +414,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <ScrollViewer Style="{ThemeResource ScrollViewerVertical}">
+                    <ScrollViewer x:Name="ScrollViewer" Style="{ThemeResource ScrollViewerVertical}">
                         <ItemsPresenter/>
                     </ScrollViewer>
                 </ControlTemplate>
