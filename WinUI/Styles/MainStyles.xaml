@@ -1,0 +1,564 @@
+﻿<ResourceDictionary
+    x:Class="ArnoldVinkStyles.MainStyles"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:AVStyles="using:ArnoldVinkStyles">
+
+    <!--Text Styles-->
+    <Style x:Key="TextBlockBlack" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationBlackBrush}"/>
+    </Style>
+    <Style x:Key="TextBlockBlackLight" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationBlackBrush}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+    </Style>
+
+    <Style x:Key="TextBlockWhite" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+    </Style>
+    <Style x:Key="TextBlockWhiteLight" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+    </Style>
+
+    <Style x:Key="TextBlockGray" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+    </Style>
+    <Style x:Key="TextBlockGrayLight" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+    </Style>
+
+    <Style x:Key="TextBlockAccent" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="Text" Value=""/>
+    </Style>
+    <Style x:Key="TextBlockAccentLight" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+    </Style>
+
+    <!--ComboBox Styles-->
+    <Style x:Key="ComboBoxWhite" TargetType="ComboBox">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="Background" Value="#15F1F1F1"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="ItemContainerStyle" Value="{ThemeResource ComboBoxItemAccent}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <Style x:Key="ComboBoxBlack" TargetType="ComboBox">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="Background" Value="#151D1D1D"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationBlackBrush}"/>
+        <Setter Property="ItemContainerStyle" Value="{ThemeResource ComboBoxItemAccent}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <!--ComboBoxItem Styles-->
+    <Style x:Key="ComboBoxItemAccent" TargetType="ComboBoxItem">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="Background" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <!--CheckBox Styles-->
+    <Style x:Key="CheckBoxWhite" TargetType="CheckBox">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <Style x:Key="CheckBoxBlack" TargetType="CheckBox">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationBlackBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <SolidColorBrush x:Key="CheckBoxForegroundChecked" Color="{ThemeResource ApplicationAccentLightColor}"/>
+    <SolidColorBrush x:Key="CheckBoxForegroundCheckedPointerOver" Color="{ThemeResource ApplicationAccentDimColor}"/>
+    <SolidColorBrush x:Key="CheckBoxForegroundUnchecked" Color="{ThemeResource ApplicationAccentLightColor}"/>
+    <SolidColorBrush x:Key="CheckBoxForegroundUncheckedPointerOver" Color="{ThemeResource ApplicationAccentDimColor}"/>
+    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="{ThemeResource ApplicationAccentLightColor}"/>
+    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="{ThemeResource ApplicationAccentDimColor}"/>
+    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked" Color="{ThemeResource ApplicationAccentLightColor}"/>
+    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="{ThemeResource ApplicationAccentDimColor}"/>
+
+    <!--ToggleSwitch Styles-->
+    <Style x:Key="ToggleSwitchWhite" TargetType="ToggleSwitch">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <Style x:Key="ToggleSwitchBlack" TargetType="ToggleSwitch">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationBlackBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <SolidColorBrush x:Key="ToggleSwitchStrokeOff" Color="{ThemeResource ApplicationAccentLightColor}"/>
+    <SolidColorBrush x:Key="ToggleSwitchStrokeOffPointerOver" Color="{ThemeResource ApplicationAccentDimColor}"/>
+    <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="{ThemeResource ApplicationAccentLightColor}"/>
+    <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="{ThemeResource ApplicationAccentDimColor}"/>
+    <SolidColorBrush x:Key="ToggleSwitchKnobFillOff" Color="{ThemeResource ApplicationDimGrayColor}"/>
+    <SolidColorBrush x:Key="ToggleSwitchKnobFillOffPointerOver" Color="{ThemeResource ApplicationDarkGrayColor}"/>
+
+    <!--TextBox Styles-->
+    <Style x:Key="TextBoxWhite" TargetType="TextBox">
+        <Setter Property="Padding" Value="4,2,4,0"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="Background" Value="#15F1F1F1"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="PlaceholderForeground" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <Style x:Key="TextBoxBlack" TargetType="TextBox">
+        <Setter Property="Padding" Value="4,2,4,0"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="Background" Value="#151D1D1D"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationBlackBrush}"/>
+        <Setter Property="PlaceholderForeground" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <!--PasswordBox Styles-->
+    <Style x:Key="PasswordBoxWhite" TargetType="PasswordBox">
+        <Setter Property="Padding" Value="4,2,4,0"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="Background" Value="#15F1F1F1"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <Style x:Key="PasswordBoxBlack" TargetType="PasswordBox">
+        <Setter Property="Padding" Value="4,2,4,0"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="Background" Value="#151D1D1D"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationBlackBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <!--Border Styles-->
+    <Style x:Key="BorderHorizontalAccentLight" TargetType="Border">
+        <Setter Property="Height" Value="4"/>
+        <Setter Property="CornerRadius" Value="2"/>
+        <Setter Property="Background" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+    </Style>
+    <Style x:Key="BorderVerticalAccentLight" TargetType="Border">
+        <Setter Property="Width" Value="4"/>
+        <Setter Property="CornerRadius" Value="2"/>
+        <Setter Property="Background" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+    </Style>
+
+    <!--ProgressBar Styles-->
+    <Style x:Key="ProgressBarAccent" TargetType="ProgressBar">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Background" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+    </Style>
+
+    <!--Button Styles-->
+    <Style x:Key="ButtonAccentWhite" TargetType="Button">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeSmall}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="Background" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <Style x:Key="ButtonAccentBlack" TargetType="Button">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeSmall}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="Background" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <Style x:Key="ButtonImageTransparentNoBorder" TargetType="Button">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Foreground" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <Style x:Key="ButtonImageTransparentWhiteBorder" TargetType="Button">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Foreground" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+    <Style x:Key="ButtonImageTransparentBlackBorder" TargetType="Button">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Foreground" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ApplicationBlackBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <!--Slider Styles-->
+    <Style x:Key="SliderAccent" TargetType="Slider">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationAccentLightBrush}"/>
+        <Setter Property="Background" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <!--ListView Styles-->
+    <Style x:Key="ListViewVertical" TargetType="ListView">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <ScrollViewer Style="{ThemeResource ScrollViewerVertical}">
+                        <ItemsPresenter/>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ListViewVerticalNoScroll" TargetType="ListView">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <ItemsPresenter/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ListViewVerticalWrap" TargetType="ListView">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <ScrollViewer Style="{ThemeResource ScrollViewerHorizontal}">
+                        <ItemsPresenter/>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ListViewHorizontal" TargetType="ListView">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <ScrollViewer Style="{ThemeResource ScrollViewerHorizontal}">
+                        <ItemsPresenter/>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ListViewHorizontalNoScroll" TargetType="ListView">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <ItemsPresenter/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ListViewHorizontalWrap" TargetType="ListView">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
+        <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <ScrollViewer Style="{ThemeResource ScrollViewerVertical}">
+                        <ItemsPresenter/>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--ListViewItem Styles-->
+    <Style x:Key="ListViewItemBlack" TargetType="ListViewItem">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template" Value="{StaticResource ListViewItemTemplateBlack}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <Style x:Key="ListViewItemWhite" TargetType="ListViewItem">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template" Value="{StaticResource ListViewItemTemplateWhite}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <Style x:Key="ListViewItemColor" TargetType="ListViewItem">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template" Value="{StaticResource ListViewItemTemplateColor}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <Style x:Key="ListViewItemNoneWhite" TargetType="ListViewItem">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template" Value="{StaticResource ListViewItemTemplateNone}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <Style x:Key="ListViewItemNoneBlack" TargetType="ListViewItem">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template" Value="{StaticResource ListViewItemTemplateNone}"/>
+        <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ApplicationDimGrayBrush}"/>
+        <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+        <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
+        <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <Style x:Key="ListViewItemDisabled" TargetType="ListViewItem">
+        <Setter Property="IsEnabled" Value="False"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+    </Style>
+
+    <!--StackPanel Styles-->
+    <Style x:Key="ListViewMenuStackPanel" TargetType="StackPanel">
+        <Setter Property="MinWidth" Value="90"/>
+        <Setter Property="Height" Value="80"/>
+    </Style>
+
+    <!--ScrollViewer Styles-->
+    <Style x:Key="ScrollViewerHorizontal" TargetType="ScrollViewer">
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="HorizontalScrollMode" Value="Auto"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="VerticalScrollMode" Value="Disabled"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+    </Style>
+    <Style x:Key="ScrollViewerHorizontalLoop" TargetType="ScrollViewer">
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="HorizontalScrollMode" Value="Auto"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="VerticalScrollMode" Value="Disabled"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="AVStyles:ScrollViewerLoop.Loop" Value="True"/>
+    </Style>
+
+    <Style x:Key="ScrollViewerVertical" TargetType="ScrollViewer">
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="HorizontalScrollMode" Value="Disabled"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="VerticalScrollMode" Value="Auto"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+    </Style>
+    <Style x:Key="ScrollViewerVerticalLoop" TargetType="ScrollViewer">
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="HorizontalScrollMode" Value="Disabled"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="VerticalScrollMode" Value="Auto"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="AVStyles:ScrollViewerLoop.Loop" Value="True"/>
+    </Style>
+
+    <Style x:Key="ScrollViewerHidden" TargetType="ScrollViewer">
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="HorizontalScrollMode" Value="Disabled"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="VerticalScrollMode" Value="Disabled"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+    </Style>
+    <Style x:Key="ScrollViewerHiddenLoop" TargetType="ScrollViewer">
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="HorizontalScrollMode" Value="Disabled"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="VerticalScrollMode" Value="Disabled"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="AVStyles:ScrollViewerLoop.Loop" Value="True"/>
+    </Style>
+</ResourceDictionary>
