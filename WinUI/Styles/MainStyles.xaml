@@ -299,7 +299,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -322,7 +322,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -343,7 +343,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -366,7 +366,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -389,7 +389,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -410,7 +410,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -555,10 +555,10 @@
     </Style>
     <Style x:Key="ScrollViewerHiddenLoop" TargetType="ScrollViewer">
         <Setter Property="IsTabStop" Value="False"/>
-        <Setter Property="HorizontalScrollMode" Value="Disabled"/>
-        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
-        <Setter Property="VerticalScrollMode" Value="Disabled"/>
-        <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="HorizontalScrollMode" Value="Auto"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="VerticalScrollMode" Value="Auto"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
         <Setter Property="AVStyles:ScrollViewerLoop.Loop" Value="True"/>
     </Style>
 </ResourceDictionary>
