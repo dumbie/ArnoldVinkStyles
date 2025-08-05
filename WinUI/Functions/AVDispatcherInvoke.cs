@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 
 namespace ArnoldVinkStyles
@@ -14,6 +15,10 @@ namespace ArnoldVinkStyles
         {
             try
             {
+                if (dispatcher == null)
+                {
+                    dispatcher = CoreApplication.GetCurrentView().CoreWindow.Dispatcher;
+                }
                 if (dispatcher.HasThreadAccess)
                 {
                     actionRun();
@@ -34,6 +39,10 @@ namespace ArnoldVinkStyles
         {
             try
             {
+                if (dispatcher == null)
+                {
+                    dispatcher = CoreApplication.GetCurrentView().CoreWindow.Dispatcher;
+                }
                 if (dispatcher.HasThreadAccess)
                 {
                     await actionRun();
