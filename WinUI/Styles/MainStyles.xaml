@@ -299,6 +299,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="SingleSelectionFollowsFocus" Value="True"/>
         <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -322,6 +323,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="SingleSelectionFollowsFocus" Value="True"/>
         <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -343,6 +345,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="SingleSelectionFollowsFocus" Value="True"/>
         <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -366,6 +369,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="SingleSelectionFollowsFocus" Value="True"/>
         <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -389,6 +393,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="SingleSelectionFollowsFocus" Value="True"/>
         <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -410,6 +415,7 @@
         <Setter Property="FontSize" Value="{ThemeResource TextSizeInterface}"/>
         <Setter Property="Foreground" Value="{ThemeResource ApplicationWhiteBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="SingleSelectionFollowsFocus" Value="True"/>
         <Setter Property="ItemContainerTransitions" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -444,6 +450,10 @@
         <Setter Property="FocusVisualMargin" Value="0"/>
     </Style>
 
+    <Style x:Key="ListViewItemBlackNoTab" BasedOn="{StaticResource ListViewItemBlack}" TargetType="ListViewItem">
+        <Setter Property="IsTabStop" Value="False"/>
+    </Style>
+
     <Style x:Key="ListViewItemWhite" TargetType="ListViewItem">
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Padding" Value="0"/>
@@ -456,6 +466,10 @@
         <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
         <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
         <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <Style x:Key="ListViewItemWhiteNoTab" BasedOn="{StaticResource ListViewItemWhite}" TargetType="ListViewItem">
+        <Setter Property="IsTabStop" Value="False"/>
     </Style>
 
     <Style x:Key="ListViewItemColor" TargetType="ListViewItem">
@@ -472,9 +486,14 @@
         <Setter Property="FocusVisualMargin" Value="0"/>
     </Style>
 
+    <Style x:Key="ListViewItemColorNoTab" BasedOn="{StaticResource ListViewItemColor}" TargetType="ListViewItem">
+        <Setter Property="IsTabStop" Value="False"/>
+    </Style>
+
     <Style x:Key="ListViewItemNoneWhite" TargetType="ListViewItem">
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Padding" Value="0"/>
+        <Setter Property="CornerRadius" Value="4"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
@@ -483,11 +502,16 @@
         <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
         <Setter Property="FocusVisualSecondaryThickness" Value="0"/>
         <Setter Property="FocusVisualMargin" Value="0"/>
+    </Style>
+
+    <Style x:Key="ListViewItemNoneWhiteNoTab" BasedOn="{StaticResource ListViewItemNoneWhite}" TargetType="ListViewItem">
+        <Setter Property="IsTabStop" Value="False"/>
     </Style>
 
     <Style x:Key="ListViewItemNoneBlack" TargetType="ListViewItem">
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Padding" Value="0"/>
+        <Setter Property="CornerRadius" Value="4"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
@@ -498,13 +522,8 @@
         <Setter Property="FocusVisualMargin" Value="0"/>
     </Style>
 
-    <Style x:Key="ListViewItemDisabled" TargetType="ListViewItem">
-        <Setter Property="IsEnabled" Value="False"/>
-        <Setter Property="Margin" Value="0"/>
-        <Setter Property="Padding" Value="0"/>
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+    <Style x:Key="ListViewItemNoneBlackNoTab" BasedOn="{StaticResource ListViewItemNoneBlack}" TargetType="ListViewItem">
+        <Setter Property="IsTabStop" Value="False"/>
     </Style>
 
     <!--StackPanel Styles-->
