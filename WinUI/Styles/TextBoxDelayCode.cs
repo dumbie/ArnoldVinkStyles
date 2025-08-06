@@ -25,7 +25,7 @@ namespace ArnoldVinkStyles
             {
                 //Start delay timer
                 TimerDelay.Interval = DelayTime;
-                TimerDelay.Tick = delegate
+                TimerDelay.TickSet = delegate
                 {
                     //Stop delay timer
                     TimerDelay.Stop();

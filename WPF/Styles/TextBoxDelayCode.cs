@@ -27,7 +27,7 @@ namespace ArnoldVinkStyles
 
             //Start delay timer
             TimerDelay.Interval = 1000;
-            TimerDelay.Tick = delegate
+            TimerDelay.TickSet = delegate
             {
                 DispatcherInvoke(delegate
                 {

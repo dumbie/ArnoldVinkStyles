@@ -96,7 +96,7 @@ namespace ArnoldVinkStyles
 
             //Start delay timer
             TimerDelay.Interval = (uint)DelayTime;
-            TimerDelay.Tick = delegate
+            TimerDelay.TickSet = delegate
             {
                 if (DelayIgnoreDrag || !SliderThumbDragging)
                 {
