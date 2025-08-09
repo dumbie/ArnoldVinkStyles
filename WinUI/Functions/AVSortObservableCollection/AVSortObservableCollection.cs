@@ -88,11 +88,19 @@ namespace ArnoldVinkStyles
                 }
 
                 //Move items
-                int moveIndex = 0;
-                foreach (T moveItem in sortEnumerable)
+                foreach ((int moveIndex, T moveItem) in sortEnumerable.Select((x, i) => (i, x)))
                 {
-                    listObservable.Move(listObservable.IndexOf(moveItem), moveIndex);
-                    moveIndex++;
+                    //Get sort index
+                    int sortIndex = listObservable.IndexOf(moveItem);
+
+                    //Check sort index
+                    if (sortIndex == moveIndex)
+                    {
+                        continue;
+                    }
+
+                    //Move sort item
+                    listObservable.Move(sortIndex, moveIndex);
                 }
 
                 //Select focused item
