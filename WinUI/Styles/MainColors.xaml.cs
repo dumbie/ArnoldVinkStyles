@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using Windows.UI;
+﻿using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
@@ -16,7 +14,7 @@ namespace ArnoldVinkStyles
                 //FixStyle UWP does not support DynamicResource by default
                 Debug.WriteLine("Changing the application accent color.");
 
-                SolidColorBrush targetSolidColorBrushLight = new SolidColorBrush(Color.FromArgb(Convert.ToByte(colorLightHex.Substring(1, 2), 16), Convert.ToByte(colorLightHex.Substring(3, 2), 16), Convert.ToByte(colorLightHex.Substring(5, 2), 16), Convert.ToByte(colorLightHex.Substring(7, 2), 16)));
+                SolidColorBrush targetSolidColorBrushLight = AVColorConverters.HexToSolidColorBrush(colorLightHex);
                 Application.Current.Resources["ApplicationAccentLightColor"] = targetSolidColorBrushLight.Color;
                 Application.Current.Resources["ApplicationAccentLightBrush"] = targetSolidColorBrushLight;
                 Debug.WriteLine("Accent light color: " + targetSolidColorBrushLight.Color);

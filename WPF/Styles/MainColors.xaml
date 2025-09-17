@@ -6,8 +6,8 @@
     <!-- Accent Color -->
     <Color x:Key="ApplicationAccentLightColor">#1E90FF</Color>
     <SolidColorBrush x:Key="ApplicationAccentLightBrush">#1E90FF</SolidColorBrush>
-    <Color x:Key="ApplicationAccentDimColor">#1873CC</Color>
-    <SolidColorBrush x:Key="ApplicationAccentDimBrush">#1873CC</SolidColorBrush>
+    <Color x:Key="ApplicationAccentDimColor">#166CBF</Color>
+    <SolidColorBrush x:Key="ApplicationAccentDimBrush">#166CBF</SolidColorBrush>
     <Color x:Key="ApplicationAccentDarkColor">#0F487F</Color>
     <SolidColorBrush x:Key="ApplicationAccentDarkBrush">#0F487F</SolidColorBrush>
 
@@ -16,10 +16,14 @@
     <SolidColorBrush x:Key="ApplicationWhiteBrush">#F1F1F1</SolidColorBrush>
     <Color x:Key="ApplicationBlackColor">#1D1D1D</Color>
     <SolidColorBrush x:Key="ApplicationBlackBrush">#1D1D1D</SolidColorBrush>
-    <Color x:Key="ApplicationDimGrayColor">#787878</Color>
-    <SolidColorBrush x:Key="ApplicationDimGrayBrush">#787878</SolidColorBrush>
+    <Color x:Key="ApplicationLightGrayColor">#DBDBDB</Color>
+    <SolidColorBrush x:Key="ApplicationLightGrayBrush">#DBDBDB</SolidColorBrush>
+    <Color x:Key="ApplicationDimGrayColor">#888888</Color>
+    <SolidColorBrush x:Key="ApplicationDimGrayBrush">#888888</SolidColorBrush>
     <Color x:Key="ApplicationDarkGrayColor">#555555</Color>
     <SolidColorBrush x:Key="ApplicationDarkGrayBrush">#555555</SolidColorBrush>
+    <Color x:Key="ApplicationVoidGrayColor">#2A2A2A</Color>
+    <SolidColorBrush x:Key="ApplicationVoidGrayBrush">#2A2A2A</SolidColorBrush>
 
     <!-- Other Color -->
     <Color x:Key="ApplicationValidColor">#1EB955</Color>

@@ -31,6 +31,8 @@
     <SolidColorBrush x:Key="ApplicationDimGrayBrush">#888888</SolidColorBrush>
     <Color x:Key="ApplicationDarkGrayColor">#555555</Color>
     <SolidColorBrush x:Key="ApplicationDarkGrayBrush">#555555</SolidColorBrush>
+    <Color x:Key="ApplicationVoidGrayColor">#2A2A2A</Color>
+    <SolidColorBrush x:Key="ApplicationVoidGrayBrush">#2A2A2A</SolidColorBrush>
 
     <!-- Other Color -->
     <Color x:Key="ApplicationValidColor">#1EB955</Color>

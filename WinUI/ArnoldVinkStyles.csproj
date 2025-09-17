@@ -1,17 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+		<TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
 		<NoWarn>CA1416</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup>
-		<UseWPF>True</UseWPF>
-		<UseWindowsForms>True</UseWindowsForms>
+		<UseWPF>False</UseWPF>
+		<UseWindowsForms>False</UseWindowsForms>
 		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
 		<OutputPath>$(SolutionDir)Build\$(Configuration)\$(AssemblyName)</OutputPath>
+	</PropertyGroup>
+	<PropertyGroup>
+		<UseUwp>true</UseUwp>
+		<UseUwpTools>true</UseUwpTools>
+		<DefaultLanguage>en-US</DefaultLanguage>
+		<DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+		<ProjectPriFileName>Resources.pri</ProjectPriFileName>
+		<DisableEmbeddedXbf>false</DisableEmbeddedXbf>
+		<WindowsPackageType>None</WindowsPackageType>
 	</PropertyGroup>
 	<PropertyGroup>
 		<Platforms>x86;x64;arm64</Platforms>
@@ -25,9 +34,6 @@
 		<DebugType>none</DebugType>
 	</PropertyGroup>
 	<ItemGroup>
-		<Resource Include="Styles\ArnoldVinkColorPickerSelect\ColorSelect.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\..\ArnoldVinkCode\Desktop\ArnoldVinkCode.csproj" />
+	  <ProjectReference Include="..\..\ArnoldVinkCode\Desktop\ArnoldVinkCode.csproj" />
 	</ItemGroup>
 </Project>

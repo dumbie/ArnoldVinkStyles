@@ -13,7 +13,7 @@ namespace ArnoldVinkStyles
             {
                 Debug.WriteLine("Changing the application accent color.");
 
-                SolidColorBrush targetSolidColorBrushLight = new BrushConverter().ConvertFrom(colorLightHex) as SolidColorBrush;
+                SolidColorBrush targetSolidColorBrushLight = AVColorConverters.HexToSolidColorBrush(colorLightHex);
                 Application.Current.Resources["ApplicationAccentLightColor"] = targetSolidColorBrushLight.Color;
                 Application.Current.Resources["ApplicationAccentLightBrush"] = targetSolidColorBrushLight;
                 Debug.WriteLine("Accent light color: " + targetSolidColorBrushLight.Color);
