@@ -5,7 +5,6 @@ using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using WinRT;
 
 namespace ArnoldVinkStyles
 {
@@ -34,77 +33,6 @@ namespace ArnoldVinkStyles
             catch (Exception ex)
             {
                 Debug.WriteLine("Failed to set IsEnabled property: " + ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Focus on framework elements
-        /// </summary>
-        public static bool AVFocus<T>(this T frameworkElement) where T : FrameworkElement
-        {
-            try
-            {
-                //Convert to control
-                Control frameworkControl = frameworkElement.As<Control>();
-
-                //Focus on control
-                bool program = frameworkControl.Focus(FocusState.Programmatic);
-                bool pointer = frameworkControl.Focus(FocusState.Pointer);
-                bool keyboard = frameworkControl.Focus(FocusState.Keyboard);
-
-                //Return result
-                return program && pointer && keyboard;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Failed to focus framework element: " + ex.Message);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Check if framework element can be focused
-        /// </summary>
-        public static bool AVFocusable<T>(this T frameworkElement) where T : FrameworkElement
-        {
-            try
-            {
-                //Check visibility
-                if (frameworkElement.Visibility != Visibility.Visible)
-                {
-                    return false;
-                }
-
-                //Convert to control
-                Control frameworkControl = frameworkElement.As<Control>();
-
-                //Check if disabled
-                if (!frameworkControl.IsEnabled)
-                {
-                    return false;
-                }
-
-                //Check if container
-                bool elementPanel = frameworkElement is Panel;
-                bool elementItemsControl = frameworkElement is ItemsControl;
-                bool containerControl = elementPanel || elementItemsControl;
-
-                //Check tab stop
-                if (!containerControl)
-                {
-                    if (!frameworkControl.IsTabStop)
-                    {
-                        return false;
-                    }
-                }
-
-                //Return result
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Failed to check if is focusable: " + ex.Message);
-                return false;
             }
         }
 
