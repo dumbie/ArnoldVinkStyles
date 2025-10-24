@@ -5,7 +5,6 @@ using System.Linq;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
 using static ArnoldVinkStyles.AVVisualTree;
 
 namespace ArnoldVinkStyles
@@ -140,6 +139,22 @@ namespace ArnoldVinkStyles
             try
             {
                 return (T)targetListViewItem.Content;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to get ListViewItem object: " + ex.Message);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Get ListView from ListViewItem container
+        /// </summary>
+        public static ListView GetListViewFromContainer(ListViewItem targetListViewItem)
+        {
+            try
+            {
+                return FindVisualParent<ListView>(targetListViewItem);
             }
             catch (Exception ex)
             {
@@ -290,53 +305,6 @@ namespace ArnoldVinkStyles
             {
                 Debug.WriteLine("Failed to count rows from ListView.");
             }
-        }
-
-        /// <summary>
-        /// Automatically select currently focused item
-        /// Usage: listView.GotFocus += ListViewEvent_Select_Focused_Item;
-        /// </summary>
-        public static void ListViewEvent_Select_Focused_Item(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                object focusItem = GetRoutedListViewItemObject<object>(e);
-                ListView listView = (ListView)sender;
-                listView.SelectedItem = focusItem;
-            }
-            catch { }
-        }
-
-        /// <summary>
-        /// Block scrollviewer from moving when using arrow keys
-        /// Usage: listView.PreviewKeyDown += ListViewEvent_Block_Scroll;
-        /// </summary>
-        public static void ListViewEvent_Block_Scroll(object sender, KeyRoutedEventArgs e)
-        {
-            try
-            {
-                if (e.Key == Windows.System.VirtualKey.Up)
-                {
-                    e.Handled = true;
-                    FocusManager.TryMoveFocus(FocusNavigationDirection.Up);
-                }
-                else if (e.Key == Windows.System.VirtualKey.Down)
-                {
-                    e.Handled = true;
-                    FocusManager.TryMoveFocus(FocusNavigationDirection.Down);
-                }
-                else if (e.Key == Windows.System.VirtualKey.Left)
-                {
-                    e.Handled = true;
-                    FocusManager.TryMoveFocus(FocusNavigationDirection.Left);
-                }
-                else if (e.Key == Windows.System.VirtualKey.Right)
-                {
-                    e.Handled = true;
-                    FocusManager.TryMoveFocus(FocusNavigationDirection.Right);
-                }
-            }
-            catch { }
         }
     }
 }
