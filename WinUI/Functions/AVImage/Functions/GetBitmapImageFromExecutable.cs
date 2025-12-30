@@ -14,7 +14,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get icon from executable file
-        private static async Task<BitmapImage> GetBitmapImageFromExecutable(string exeFilePath, int iconIndex, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> GetBitmapImageFromExecutable(AVImageFile imageFile, string exeFilePath, int iconIndex)
         {
             IntPtr iconHandle = IntPtr.Zero;
             IntPtr libraryHandle = IntPtr.Zero;
@@ -94,11 +94,10 @@ namespace ArnoldVinkStyles
                     iconHandle = CreateIconFromResourceEx(iconBytes, (uint)iconBytes.Length, true, IconVersion.Windows3x, iconDirEntry.bWidth, iconDirEntry.bHeight, IconResourceFlags.LR_DEFAULTCOLOR);
 
                     //Convert to bitmap
-                    using (Bitmap bitmap = Icon.FromHandle(iconHandle).ToBitmap())
+                    using (Bitmap imageBitmap = Icon.FromHandle(iconHandle).ToBitmap())
                     {
-
                         //Convert to bitmap image
-                        return await BitmapToBitmapImage(bitmap, imageWidth, imageHeight);
+                        return await GetBitmapImageFromBitmap(imageFile, imageBitmap);
                     }
                 }
                 else
@@ -107,10 +106,10 @@ namespace ArnoldVinkStyles
                     using (MemoryStream memoryStreamIcon = new MemoryStream(iconBytes))
                     {
                         //Convert image data to bitmap
-                        using (Bitmap bitmap = new Bitmap(memoryStreamIcon))
+                        using (Bitmap imageBitmap = new Bitmap(memoryStreamIcon))
                         {
                             //Convert to bitmap image
-                            return await BitmapToBitmapImage(bitmap, imageWidth, imageHeight);
+                            return await GetBitmapImageFromBitmap(imageFile, imageBitmap);
                         }
                     }
                 }

@@ -11,7 +11,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get icon from file type
-        private static async Task<BitmapImage> GetBitmapImageFromFileType(string fileType, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> GetBitmapImageFromFileType(AVImageFile imageFile, string fileType)
         {
             IntPtr iconHandle = IntPtr.Zero;
             try
@@ -24,6 +24,7 @@ namespace ArnoldVinkStyles
                 SHGetFileInfo(fileType, 0, ref shFileInfo, (uint)Marshal.SizeOf(shFileInfo), SHGFI.SHGFI_SYSICONINDEX | SHGFI.SHGFI_USEFILEATTRIBUTES);
 
                 //Get image list
+                //Fix make sure is run in sta thread
                 IImageList iImageList = null;
                 SHGetImageList(IMAGELISTTYPE.SHIL_JUMBO, IID_IImageList2, ref iImageList);
                 if (iImageList == null)
@@ -41,10 +42,10 @@ namespace ArnoldVinkStyles
                 }
 
                 //Convert to bitmap
-                using (Bitmap bitmap = Icon.FromHandle(iconHandle).ToBitmap())
+                using (Bitmap imageBitmap = Icon.FromHandle(iconHandle).ToBitmap())
                 {
                     //Convert to bitmap image
-                    return await BitmapToBitmapImage(bitmap, imageWidth, imageHeight);
+                    return await GetBitmapImageFromBitmap(imageFile, imageBitmap);
                 }
             }
             catch (Exception ex)

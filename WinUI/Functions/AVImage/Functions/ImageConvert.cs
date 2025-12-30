@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -11,7 +12,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Convert Bitmap to RandomAccessStream
-        private static IRandomAccessStream BitmapToRandomAccessStream(Bitmap sourceBitmap)
+        private static IRandomAccessStream BitmapToRandomAccessStream(Bitmap imageBitmap)
         {
             try
             {
@@ -19,7 +20,7 @@ namespace ArnoldVinkStyles
                 MemoryStream memoryStream = new MemoryStream();
 
                 //Save bitmap frame
-                sourceBitmap.Save(memoryStream, ImageFormat.Png);
+                imageBitmap.Save(memoryStream, ImageFormat.Png);
 
                 //Set memory stream position
                 memoryStream.Position = 0;
@@ -31,84 +32,96 @@ namespace ArnoldVinkStyles
             return null;
         }
 
-        //Convert Bitmap to BitmapImage
-        private static async Task<BitmapImage> BitmapToBitmapImage(Bitmap sourceBitmap, int imageWidth, int imageHeight)
+        //Convert Uri to BitmapImage
+        private static BitmapImage GetBitmapImageFromUri(AVImageFile imageFile, Uri imageUri)
         {
             try
             {
                 //Prepare application bitmap image
-                BitmapImage imageToBitmapImage = BeginBitmapImage(imageWidth, imageHeight);
+                BitmapImage imageToBitmapImage = BitmapImageCreate(imageFile);
 
-                //Save bitmap to random access stream
-                IRandomAccessStream randomAccessStream = BitmapToRandomAccessStream(sourceBitmap);
-
-                //Set bitmap image stream source
-                await imageToBitmapImage.SetSourceAsync(randomAccessStream);
+                //Set bitmap image uri source
+                BitmapImageSet(imageFile, imageToBitmapImage, imageUri);
 
                 //Return application bitmap image
-                return EndBitmapImage(imageToBitmapImage, ref randomAccessStream);
+                return imageToBitmapImage;
             }
             catch { }
             return null;
         }
 
-        //Convert Uri to BitmapImage
-        private static BitmapImage UriToBitmapImage(Uri sourceUri, int imageWidth, int imageHeight)
+        //Convert Bitmap to BitmapImage
+        private static async Task<BitmapImage> GetBitmapImageFromBitmap(AVImageFile imageFile, Bitmap imageBitmap)
         {
             try
             {
                 //Prepare application bitmap image
-                BitmapImage imageToBitmapImage = BeginBitmapImage(imageWidth, imageHeight);
-                IRandomAccessStream randomAccessStream = null;
+                BitmapImage imageToBitmapImage = BitmapImageCreate(imageFile);
 
-                //Set bitmap image uri source
-                imageToBitmapImage.UriSource = sourceUri;
+                //Save bitmap to random access stream
+                using (IRandomAccessStream randomAccessStream = BitmapToRandomAccessStream(imageBitmap))
+                {
+                    //Set bitmap image stream source
+                    await BitmapImageSet(imageFile, imageToBitmapImage, randomAccessStream);
+                }
 
                 //Return application bitmap image
-                return EndBitmapImage(imageToBitmapImage, ref randomAccessStream);
+                return imageToBitmapImage;
             }
             catch { }
             return null;
         }
 
         //Convert Bytes to BitmapImage
-        private static async Task<BitmapImage> BytesToBitmapImage(byte[] sourceBytes, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> GetBitmapImageFromBytes(AVImageFile imageFile, byte[] imageBytes)
         {
             try
             {
                 //Prepare application bitmap image
-                BitmapImage imageToBitmapImage = BeginBitmapImage(imageWidth, imageHeight);
+                BitmapImage imageToBitmapImage = BitmapImageCreate(imageFile);
 
-                //Save bytes to memorystream
-                MemoryStream memoryStream = new MemoryStream(sourceBytes);
-                IRandomAccessStream randomAccessStream = memoryStream.AsRandomAccessStream();
-
-                //Set bitmap image stream source
-                await imageToBitmapImage.SetSourceAsync(randomAccessStream);
+                //Save bytes to random access stream
+                using (IRandomAccessStream randomAccessStream = new MemoryStream(imageBytes).AsRandomAccessStream())
+                {
+                    //Set bitmap image stream source
+                    await BitmapImageSet(imageFile, imageToBitmapImage, randomAccessStream);
+                }
 
                 //Return application bitmap image
-                return EndBitmapImage(imageToBitmapImage, ref randomAccessStream);
+                return imageToBitmapImage;
             }
-            catch { }
-            return null;
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to load image from bytes: " + ex.Message);
+                return null;
+            }
         }
 
         //Convert RandomAccessStream to BitmapImage
-        private static async Task<BitmapImage> RandomAccessStreamToBitmapImage(IRandomAccessStream sourceStream, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> GetBitmapImageFromStream(AVImageFile imageFile, IRandomAccessStream randomAccessStream)
         {
             try
             {
                 //Prepare application bitmap image
-                BitmapImage imageToBitmapImage = BeginBitmapImage(imageWidth, imageHeight);
+                BitmapImage imageToBitmapImage = BitmapImageCreate(imageFile);
 
                 //Set bitmap image stream source
-                await imageToBitmapImage.SetSourceAsync(sourceStream);
+                await BitmapImageSet(imageFile, imageToBitmapImage, randomAccessStream);
+
+                //Clear memory stream
+                if (randomAccessStream != null)
+                {
+                    randomAccessStream.Dispose();
+                }
 
                 //Return application bitmap image
-                return EndBitmapImage(imageToBitmapImage, ref sourceStream);
+                return imageToBitmapImage;
             }
-            catch { }
-            return null;
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to load image from stream: " + ex.Message);
+                return null;
+            }
         }
     }
 }

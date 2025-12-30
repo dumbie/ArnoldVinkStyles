@@ -10,7 +10,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get window icon from process window
-        private static async Task<BitmapImage> GetBitmapImageFromWindow(IntPtr windowHandle, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> GetBitmapImageFromWindow(AVImageFile imageFile, IntPtr windowHandle)
         {
             IntPtr iconHandle = IntPtr.Zero;
             try
@@ -39,10 +39,10 @@ namespace ArnoldVinkStyles
                 }
 
                 //Convert to bitmap
-                using (Bitmap bitmap = Icon.FromHandle(iconHandle).ToBitmap())
+                using (Bitmap imageBitmap = Icon.FromHandle(iconHandle).ToBitmap())
                 {
                     //Convert to bitmap image
-                    return await BitmapToBitmapImage(bitmap, imageWidth, imageHeight);
+                    return await GetBitmapImageFromBitmap(imageFile, imageBitmap);
                 }
             }
             catch (Exception ex)

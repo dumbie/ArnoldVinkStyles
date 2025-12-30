@@ -11,7 +11,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get BitmapImage from shell file
-        private static async Task<BitmapImage> GetBitmapImageFromShellFile(string filePath, int imageWidth, int imageHeight, bool iconOnly)
+        private static async Task<BitmapImage> GetBitmapImageFromShellFile(AVImageFile imageFile, string filePath, bool iconOnly)
         {
             IntPtr bitmapPointer = IntPtr.Zero;
             try
@@ -29,8 +29,15 @@ namespace ArnoldVinkStyles
 
                 //Set bitmap target size
                 WindowSize bitmapSize = new WindowSize();
-                bitmapSize.cx = imageWidth;
-                bitmapSize.cy = imageHeight;
+                if (imageFile.Width == 0 && imageFile.Height == 0)
+                {
+                    bitmapSize.cx = 256;
+                }
+                else
+                {
+                    bitmapSize.cx = imageFile.Width;
+                    bitmapSize.cy = imageFile.Height;
+                }
 
                 //Set bitmap flags
                 SIIGBF extractFlags = SIIGBF.SIIGBF_BIGGERSIZEOK | (iconOnly ? SIIGBF.SIIGBF_ICONONLY : SIIGBF.SIIGBF_THUMBNAILONLY);
@@ -46,13 +53,13 @@ namespace ArnoldVinkStyles
                 }
 
                 //Convert pointer to bitmap
-                using (Bitmap sourceBitmap = Bitmap.FromHbitmap(bitmapPointer))
+                using (Bitmap imageBitmap = Bitmap.FromHbitmap(bitmapPointer))
                 {
                     //Make bitmap transparent
-                    sourceBitmap.MakeTransparent(); //Fix transparency issue
+                    imageBitmap.MakeTransparent(); //Fix transparency issue
 
                     //Convert to bitmap image
-                    return await BitmapToBitmapImage(sourceBitmap, imageWidth, imageHeight);
+                    return await GetBitmapImageFromBitmap(imageFile, imageBitmap);
                 }
             }
             catch (Exception ex)

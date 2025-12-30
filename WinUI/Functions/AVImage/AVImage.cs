@@ -10,33 +10,13 @@ namespace ArnoldVinkStyles
 {
     public partial class AVImage
     {
+        //Get BitmapImage from file or window
+        //Note: WinUI does not support BitmapSource Freeze so using dispatcher is required
+        //Note: WinUI BitmapImage needs to be initialized in UI thread to prevent COMException
         public static async Task<BitmapImage> FileToBitmapImage(AVImageFile imageFile)
         {
-            //Note: WinUI does not support BitmapSource Freeze so using this as workaround.
-            BitmapImage bitmapImageDispatched = null;
             try
             {
-                await AVDispatcherInvoke.DispatcherInvoke(imageFile.Dispatcher, async delegate
-                {
-                    bitmapImageDispatched = await FileToBitmapImageInternal(imageFile);
-                });
-            }
-            catch { }
-            return bitmapImageDispatched;
-        }
-
-        //Get BitmapImage from file or window
-        private static async Task<BitmapImage> FileToBitmapImageInternal(AVImageFile imageFile)
-        {
-            try
-            {
-                //Load image from bytes
-                if (imageFile.ImageBytes != null && imageFile.ImageBytes.Any())
-                {
-                    BitmapImage bitmapImage = await GetBitmapImageFromBytes(imageFile.ImageBytes, imageFile.Width, imageFile.Height);
-                    if (bitmapImage != null) { return bitmapImage; }
-                }
-
                 //Load image from path
                 if (imageFile.FilePaths != null && imageFile.FilePaths.Any())
                 {
@@ -48,49 +28,52 @@ namespace ArnoldVinkStyles
                             if (string.IsNullOrWhiteSpace(filePath)) { continue; }
 
                             //Adjust file path
-                            string filePathLower = filePath.ToLower().Trim();
-                            if (filePathLower.Contains("/") && filePathLower.Contains("\\"))
+                            string filePathTrim = filePath.Trim();
+                            if (filePathTrim.Contains("/") && filePathTrim.Contains("\\"))
                             {
-                                filePathLower = filePathLower.Replace("/", "\\");
+                                filePathTrim = filePathTrim.Replace("/", "\\");
                             }
-                            Debug.WriteLine("Loading image: " + filePathLower);
+                            string filePathLower = filePathTrim.ToLower();
 
                             //Check file exists
                             bool fileExists = File.Exists(filePathLower);
                             bool folderExists = Directory.Exists(filePathLower);
 
-                            if (filePathLower.StartsWith("pack://") || filePathLower.StartsWith("http://") || filePathLower.StartsWith("https://"))
+                            //Write debug line
+                            Debug.WriteLine("Loading image: " + filePathLower + " " + fileExists + "/" + folderExists);
+
+                            if (filePathLower.Contains("://"))
                             {
-                                BitmapImage bitmapImage = GetBitmapImageFromUri(new Uri(filePathLower, UriKind.RelativeOrAbsolute), imageFile.Width, imageFile.Height);
-                                if (bitmapImage != null && bitmapImage.PixelWidth != 0 && bitmapImage.PixelHeight != 0) { return bitmapImage; }
+                                BitmapImage bitmapImage = GetBitmapImageFromUri(imageFile, new Uri(filePathTrim, UriKind.RelativeOrAbsolute));
+                                if (bitmapImage != null) { return bitmapImage; } //Uri can't be checked
                             }
                             if (fileExists && filePathLower.EndsWith(".ico"))
                             {
-                                BitmapImage bitmapImage = await GetBitmapImageFromIcoFile(filePathLower, imageFile.Width, imageFile.Height);
-                                if (bitmapImage != null && bitmapImage.PixelWidth != 0 && bitmapImage.PixelHeight != 0) { return bitmapImage; }
+                                BitmapImage bitmapImage = await GetBitmapImageFromIcoFile(imageFile, filePathLower);
+                                if (BitmapImageCheck(imageFile, bitmapImage)) { return bitmapImage; }
                             }
                             if (fileExists && (filePathLower.EndsWith(".exe") || filePathLower.EndsWith(".dll") || filePathLower.EndsWith(".bin")))
                             {
-                                BitmapImage bitmapImage = await GetBitmapImageFromExecutable(filePathLower, imageFile.IconIndex, imageFile.Width, imageFile.Height);
-                                if (bitmapImage != null && bitmapImage.PixelWidth != 0 && bitmapImage.PixelHeight != 0) { return bitmapImage; }
+                                BitmapImage bitmapImage = await GetBitmapImageFromExecutable(imageFile, filePathLower, imageFile.IconIndex);
+                                if (BitmapImageCheck(imageFile, bitmapImage)) { return bitmapImage; }
                             }
                             if (imageFile.UseThumbnail)
                             {
                                 if (fileExists || folderExists)
                                 {
-                                    BitmapImage bitmapImageThumb = await GetBitmapImageFromShellFile(filePathLower, imageFile.Width, imageFile.Height, false);
-                                    if (bitmapImageThumb != null && bitmapImageThumb.PixelWidth != 0 && bitmapImageThumb.PixelHeight != 0) { return bitmapImageThumb; }
+                                    BitmapImage bitmapImageThumb = await GetBitmapImageFromShellFile(imageFile, filePathLower, false);
+                                    if (BitmapImageCheck(imageFile, bitmapImageThumb)) { return bitmapImageThumb; }
 
-                                    BitmapImage bitmapImageIcon = await GetBitmapImageFromShellFile(filePathLower, imageFile.Width, imageFile.Height, true);
-                                    if (bitmapImageIcon != null && bitmapImageIcon.PixelWidth != 0 && bitmapImageIcon.PixelHeight != 0) { return bitmapImageIcon; }
+                                    BitmapImage bitmapImageIcon = await GetBitmapImageFromShellFile(imageFile, filePathLower, true);
+                                    if (BitmapImageCheck(imageFile, bitmapImageIcon)) { return bitmapImageIcon; }
                                 }
                             }
                             else
                             {
                                 if (fileExists)
                                 {
-                                    BitmapImage bitmapImage = await GetBitmapImageFromPath(filePathLower, imageFile.Width, imageFile.Height);
-                                    if (bitmapImage != null && bitmapImage.PixelWidth != 0 && bitmapImage.PixelHeight != 0) { return bitmapImage; }
+                                    BitmapImage bitmapImage = await GetBitmapImageFromPath(imageFile, filePathLower);
+                                    if (BitmapImageCheck(imageFile, bitmapImage)) { return bitmapImage; }
                                 }
                             }
                             if (imageFile.SearchPaths != null && imageFile.SearchPaths.Any())
@@ -98,7 +81,8 @@ namespace ArnoldVinkStyles
                                 string foundImage = Search_Files([filePathLower], imageFile.SearchPaths, false).FirstOrDefault();
                                 if (!string.IsNullOrWhiteSpace(foundImage))
                                 {
-                                    return await GetBitmapImageFromPath(foundImage, imageFile.Width, imageFile.Height);
+                                    BitmapImage bitmapImage = await GetBitmapImageFromPath(imageFile, foundImage);
+                                    if (BitmapImageCheck(imageFile, bitmapImage)) { return bitmapImage; }
                                 }
                             }
                         }
@@ -106,17 +90,45 @@ namespace ArnoldVinkStyles
                     }
                 }
 
-                //Image not found, load window icon
+                //Load image from uri
+                if (imageFile.ImageUri != null)
+                {
+                    BitmapImage bitmapImage = GetBitmapImageFromUri(imageFile, imageFile.ImageUri);
+                    if (bitmapImage != null) { return bitmapImage; } //Uri can't be checked
+                }
+
+                //Load image from file type
+                if (!string.IsNullOrWhiteSpace(imageFile.FileType))
+                {
+                    BitmapImage bitmapImage = await GetBitmapImageFromFileType(imageFile, imageFile.FileType);
+                    if (BitmapImageCheck(imageFile, bitmapImage)) { return bitmapImage; }
+                }
+
+                //Load image from window
                 if (imageFile.WindowHandle != IntPtr.Zero)
                 {
-                    BitmapImage bitmapImage = await GetBitmapImageFromWindow(imageFile.WindowHandle, imageFile.Width, imageFile.Height);
-                    if (bitmapImage != null) { return bitmapImage; }
+                    BitmapImage bitmapImage = await GetBitmapImageFromWindow(imageFile, imageFile.WindowHandle);
+                    if (BitmapImageCheck(imageFile, bitmapImage)) { return bitmapImage; }
+                }
+
+                //Load image from bitmap
+                if (imageFile.ImageBitmap != null)
+                {
+                    BitmapImage bitmapImage = await GetBitmapImageFromBitmap(imageFile, imageFile.ImageBitmap);
+                    if (BitmapImageCheck(imageFile, bitmapImage)) { return bitmapImage; }
+                }
+
+                //Load image from bytes
+                if (imageFile.ImageBytes != null && imageFile.ImageBytes.Any())
+                {
+                    BitmapImage bitmapImage = await GetBitmapImageFromBytes(imageFile, imageFile.ImageBytes);
+                    if (BitmapImageCheck(imageFile, bitmapImage)) { return bitmapImage; }
                 }
 
                 //Image not found, load backup file
                 if (!string.IsNullOrWhiteSpace(imageFile.BackupPath))
                 {
-                    return await GetBitmapImageFromPath(imageFile.BackupPath, imageFile.Width, imageFile.Height);
+                    return await GetBitmapImageFromPath(imageFile, imageFile.BackupPath);
                 }
                 else
                 {

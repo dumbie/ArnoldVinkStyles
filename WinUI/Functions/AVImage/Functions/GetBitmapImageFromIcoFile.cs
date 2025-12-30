@@ -13,7 +13,7 @@ namespace ArnoldVinkStyles
     public partial class AVImage
     {
         //Get highest quality image from ico file
-        private static async Task<BitmapImage> GetBitmapImageFromIcoFile(string icoFilePath, int imageWidth, int imageHeight)
+        private static async Task<BitmapImage> GetBitmapImageFromIcoFile(AVImageFile imageFile, string icoFilePath)
         {
             List<BitmapFrameOrder> bitmapFrames = new List<BitmapFrameOrder>();
             try
@@ -40,7 +40,7 @@ namespace ArnoldVinkStyles
                         BitmapFrameOrder bitmapFrameLargest = bitmapFrames.OrderBy(x => x.PixelWidth).ThenBy(x => x.ThumbnailSize).LastOrDefault();
 
                         //Convert image stream to bitmap image
-                        return await RandomAccessStreamToBitmapImage(bitmapFrameLargest.ThumbnailImageStream, imageWidth, imageHeight);
+                        return await GetBitmapImageFromStream(imageFile, bitmapFrameLargest.ThumbnailImageStream);
                     }
                 }
             }

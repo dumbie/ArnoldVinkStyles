@@ -1,54 +1,103 @@
-﻿using Windows.Storage.Streams;
+﻿using System;
+using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace ArnoldVinkStyles
 {
     public partial class AVImage
     {
-        //Begin bitmap image
-        private static BitmapImage BeginBitmapImage(int imageWidth, int imageHeight)
+        //Create bitmap image
+        private static BitmapImage BitmapImageCreate(AVImageFile imageFile)
         {
+            BitmapImage bitmapImage = null;
             try
             {
-                //Initializate bitmap image
-                BitmapImage bitmapImage = new BitmapImage();
-
-                //Set bitmap image options
-                bitmapImage.CreateOptions = BitmapCreateOptions.None;
-
-                //Set bitmap size
-                if (imageWidth > 0)
+                AVDispatcherInvoke.DispatcherInvoke(imageFile.Dispatcher, delegate
                 {
-                    bitmapImage.DecodePixelWidth = imageWidth;
-                }
-                if (imageHeight > 0)
-                {
-                    bitmapImage.DecodePixelHeight = imageHeight;
-                }
+                    //Create bitmap image (ui thread to prevent COMException)
+                    bitmapImage = new BitmapImage();
 
-                //Return bitmap image
-                return bitmapImage;
+                    //Set bitmap options
+                    bitmapImage.CreateOptions = BitmapCreateOptions.None;
+
+                    //Set bitmap size
+                    if (imageFile.Width > 0)
+                    {
+                        bitmapImage.DecodePixelWidth = imageFile.Width;
+                    }
+                    if (imageFile.Height > 0)
+                    {
+                        bitmapImage.DecodePixelHeight = imageFile.Height;
+                    }
+                });
             }
             catch { }
-            return null;
+            return bitmapImage;
         }
 
-        //End bitmap image
-        private static BitmapImage EndBitmapImage(BitmapImage bitmapImage, ref IRandomAccessStream randomAccessStream)
+        //Check bitmap image
+        private static bool BitmapImageCheck(AVImageFile imageFile, BitmapImage bitmapImage)
+        {
+            bool bitmapValid = true;
+            try
+            {
+                //Check bitmap image is null
+                if (bitmapImage == null)
+                {
+                    return false;
+                }
+
+                //Check bitmap image size
+                AVDispatcherInvoke.DispatcherInvoke(imageFile.Dispatcher, delegate
+                {
+                    //Debug.WriteLine("Checking bitmap image: " + bitmapImage.PixelWidth + "w " + bitmapImage.PixelHeight + "h");
+                    if (bitmapImage.PixelWidth <= 0)
+                    {
+                        bitmapValid = false;
+                    }
+                    else if (bitmapImage.PixelHeight <= 0)
+                    {
+                        bitmapValid = false;
+                    }
+                });
+            }
+            catch { }
+            return bitmapValid;
+        }
+
+        //Set bitmap image source
+        private static async Task<bool> BitmapImageSet(AVImageFile imageFile, BitmapImage bitmapImage, IRandomAccessStream randomAccessStream)
         {
             try
             {
-                //Clear memory stream
-                if (randomAccessStream != null)
+                await AVDispatcherInvoke.DispatcherInvoke(imageFile.Dispatcher, async delegate
                 {
-                    randomAccessStream.Dispose();
-                }
-
-                //Return bitmap image
-                return bitmapImage;
+                    await bitmapImage.SetSourceAsync(randomAccessStream);
+                });
+                return true;
             }
-            catch { }
-            return null;
+            catch
+            {
+                return false;
+            }
+        }
+
+        //Set bitmap uri source
+        private static bool BitmapImageSet(AVImageFile imageFile, BitmapImage bitmapImage, Uri uri)
+        {
+            try
+            {
+                AVDispatcherInvoke.DispatcherInvoke(imageFile.Dispatcher, delegate
+                {
+                    bitmapImage.UriSource = uri;
+                });
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
