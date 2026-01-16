@@ -10,6 +10,8 @@
     <SolidColorBrush x:Key="ApplicationAccentDimBrush">#166CBF</SolidColorBrush>
     <Color x:Key="ApplicationAccentDarkColor">#0F487F</Color>
     <SolidColorBrush x:Key="ApplicationAccentDarkBrush">#0F487F</SolidColorBrush>
+    <Color x:Key="ApplicationAccentVoidColor">#07243F</Color>
+    <SolidColorBrush x:Key="ApplicationAccentVoidBrush">#07243F</SolidColorBrush>
 
     <!-- Basic Color -->
     <Color x:Key="ApplicationWhiteColor">#F1F1F1</Color>

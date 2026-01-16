@@ -7,6 +7,6 @@ namespace ArnoldVinkStyles
     {
         //Interop
         [DllImport("Windows.UI.dll", EntryPoint = "#1500", CharSet = CharSet.Unicode)]
-        public static extern int PrivateCreateCoreWindow(CORE_WINDOW_TYPE WindowType, string pWindowTitle, int X, int Y, int uWidth, int uHeight, IntPtr dwAttributes, IntPtr hOwnerWindow, Guid riid, out IntPtr ppv);
+        public static extern int PrivateCreateCoreWindow(CORE_WINDOW_TYPE WindowType, string pWindowTitle, int X, int Y, int uWidth, int uHeight, int dwAttributes, IntPtr hOwnerWindow, Guid riid, out IntPtr ppv);
     }
 }
